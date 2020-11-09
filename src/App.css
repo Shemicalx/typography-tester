@@ -1,12 +1,10 @@
 :root{
   font-size: 16px;
   --color-grey-normal: #AAA;
+  --color-grey-light: #CCC;
   --color-grey-dark: #444;
-  --color-white-normal: #DDD;
-}
-
-::placeholder {
-  color: var(--color-white-normal);
+  --color-white-normal: #FFF;
+  --color-white-dark: #EEE;
 }
 
 body{
@@ -17,6 +15,14 @@ body{
 
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
+}
+
+span {
+  /* temporary */
+  font-size: 10px;
+  letter-spacing: normal;
+  font-style: italic;
+  font-weight: lighter;
 }
 
 .App{
@@ -49,6 +55,12 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--color-grey-dark);
   overflow-wrap: break-word;
   overflow: hidden;
+  transition: background-color 0.4s;
+}
+
+.DisplayBlock:hover{
+  cursor: pointer;
+  background-color: var(--color-white-dark);
 }
 
 .SideBar {  
@@ -66,8 +78,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .SideBar__TextArea {
-  background-color: var(--color-grey-dark);
-  color: var(--color-white-normal);
+  background-color: var(--color-white-normal);
+  color: var(--color-grey-dark);
   font-size: 1rem;
   margin-bottom: 1rem;
   resize: none;
@@ -75,12 +87,24 @@ h1, h2, h3, h4, h5, h6 {
   outline: none;
 }
 
-.SideBar__FontSizeRange {
+.SideBar > div {
   width: 100%;
   display: flex;
-  justify-content: space-evenly;
+  text-align: center;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.SideBar__FontSizeRange input{
+.SideBar__InputsLabel {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.2rem;
+}
+
+.SideBar > div > div input{
   width: 3rem;
+  color: var(--color-grey-dark);
+  background-color: var(--color-white-normal);
+  border: none;
+  margin: 0 2px;
 }

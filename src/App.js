@@ -8,10 +8,40 @@ class App extends React.Component {
     super(props);
     this.state = {
       text: "Lorem ipsum dolor sit amet, usu ea quis wisi. Pri ex justo soluta numquam, inani invidunt expetendis eu per. Te meis assueverit adversarium sea, ex illum blandit adolescens mel, ea mel graeco meliore scripserit. Nam fugit appareat ut, ad utamur senserit iudicabit vim, dico hendrerit ne vix.",
-      fontSizeRange: {
-        min: 12,
-        max: 24,
-        intervals: (24 - 12) / 5
+      fontProperties: {
+        fontSize: {
+          range: {
+            min: 12,
+            max: 24,
+            // intervals = (max - min) / (number of grids - 1)
+            intervals: (24 - 12) / 5,
+            step: 1,
+          }
+        },
+        lineHeight: {
+          range: {
+            min: 1.2,
+            max: 1.2,
+            intervals: (1.2 - 1.2) / 5,
+            step: 0.05,
+          }
+        },
+        letterSpacing: {
+          range: {
+            min: 0,
+            max: 0,
+            intervals: 0,
+            step: 0.1,
+          }
+        },
+        wordSpacing: {
+          range: {
+            min: 0,
+            max: 0,
+            intervals: 0,
+            step: 0.1,
+          }
+        },
       }
     }
   }
@@ -22,33 +52,35 @@ class App extends React.Component {
     })
   };
 
-  handleFontSizeInputChange = (event) => {
-    let {min, max, intervals} = this.state.fontSizeRange;
-    if(event.target.className === "SideBar__FontSizeMin"){
-      min = Number(event.target.value);
-      if(min > max){
-        max = min;
-      }
-    } else {
-      max = Number(event.target.value);
+  handleFontPropertyChange = (propertyToUpdate, minOrMax, event) => {
+    //Update min/max range properties based on minOrMax
+    let properties = this.state.fontProperties;
+    properties[propertyToUpdate].range[minOrMax] = Number(event.target.value);
+    //Calculate new intervals and make sure max and min stay together
+    let {min, max, intervals, step} = properties[propertyToUpdate].range;
+    if(max < min) {
+      max = min;
     }
-    if(min >= max){
-      intervals = 0;
-    } else{
-      intervals = ((max - min) / 5);
-    }
+    intervals = (max - min) / 5;
+    properties[propertyToUpdate].range = {min, max, intervals, step};
     this.setState({
-      fontSizeRange: { min, max, intervals}
+      fontProperties: properties,
     });
   };
 
+  handleDisplayBlockClick = (event) => {
+    //NEED TO RESET PROPERTIES TO MATCH CLICKED BLOCK
+  };
+
   render() {
+
     return (
       <div className="App">
         <TestingSideBar 
           handleTextAreaChange={this.handleTextAreaChange}
-          handleFontSizeInputChange={this.handleFontSizeInputChange}
+          handleFontPropertyChange={this.handleFontPropertyChange}
           fontSizeRange={this.state.fontSizeRange}
+          fontProperties={this.state.fontProperties}
         />
         <main className="App__Display">
           <section className="App__DisplayGrid">
@@ -58,7 +90,16 @@ class App extends React.Component {
                   <DisplayBlock 
                     content={this.state.text} 
                     fontSize={
-                      this.state.fontSizeRange.min + this.state.fontSizeRange.intervals * (index)
+                      this.state.fontProperties.fontSize.range.min + this.state.fontProperties.fontSize.range.intervals * (index)
+                    }
+                    lineHeight={
+                      this.state.fontProperties.lineHeight.range.min + this.state.fontProperties.lineHeight.range.intervals * (index)
+                    }
+                    letterSpacing={
+                      this.state.fontProperties.letterSpacing.range.min + this.state.fontProperties.letterSpacing.range.intervals * (index)
+                    }
+                    wordSpacing={
+                      this.state.fontProperties.wordSpacing.range.min + this.state.fontProperties.wordSpacing.range.intervals * (index)
                     }
                   />
                 )
@@ -72,11 +113,17 @@ class App extends React.Component {
 }
 
 const DisplayBlock = (props) => {
+
   return (
   <div 
     className="DisplayBlock" 
-    //TEMPORARY FONT SIZE TEST
-    style={{'fontSize': props.fontSize}}
+    //TEMPORARY 
+    style={{
+      'fontSize': `${props.fontSize}px`,
+      'lineHeight': `${props.lineHeight}`,
+      'letterSpacing': `${props.letterSpacing}px`,
+      'wordSpacing': `${props.wordSpacing}px`,
+    }}
   >
     {props.content}
   </div>
@@ -84,6 +131,7 @@ const DisplayBlock = (props) => {
 }
 
 const TestingSideBar = (props) => {
+
   return (
     <div className="SideBar">
       <h1 className="SideBar__Title">
@@ -96,30 +144,53 @@ const TestingSideBar = (props) => {
         placeholder="Write something!"
         onChange={props.handleTextAreaChange} 
       />
-      {/* Change the size of the font by setting a range */}
-      <div className="SideBar__FontSizeRange">
-        <h3>
-          Font Size Range
-        </h3>
+      {
+        Object.entries(props.fontProperties).map(([propertyName, propertyObj]) => {
+          return (
+            <FontPropertyControls 
+              property={propertyName} 
+              range={propertyObj.range}
+              fontPropertyChangeHandler={props.handleFontPropertyChange}
+            />      
+          )    
+        })
+      }
+    </div>
+  )
+}
+
+const FontPropertyControls = (props) => {
+
+  const property = props.property;
+  const propertyNameCapitalized = property.replace(/[a-z]{1}/i, char => char.toUpperCase());
+  const {min, max, step} = props.range;
+
+  return (
+    <div className={`SideBar__${propertyNameCapitalized}Range`}>
+      <label className="SideBar__InputsLabel">
+        {propertyNameCapitalized.replace(/([a-z])([A-Z])/g, '$1 $2')}
+        <span>{property === 'lineHeight' ? 'relative' : 'pixels' }</span>
+      </label>
+      <div className="SideBar__Inputs">
         <input
-          className="SideBar__FontSizeMin" 
+          className={`SideBar__${propertyNameCapitalized}Min`}
           min="0" 
           type="number" 
-          title="Set minimum font size" 
-          value={props.fontSizeRange.min}
-          onChange={props.handleFontSizeInputChange}
+          step={step}
+          title={`Set minimum ${property}`}
+          value={min}
+          onChange={(e)=>props.fontPropertyChangeHandler(property, 'min' , e)}
         />
         <input 
-          className="SideBar__FontSizeMax"
-          // min={props.fontSizeRange.min} 
+          className={`SideBar__${propertyNameCapitalized}Max`}
           min="0"
           type="number" 
-          title="Set maximum font size" 
-          value={props.fontSizeRange.max}
-          onChange={props.handleFontSizeInputChange}
+          step={step}
+          title={`Set maximum ${property}`} 
+          value={max}
+          onChange={(e)=>props.fontPropertyChangeHandler(property, 'max', e)}
         />
       </div>
-
     </div>
   )
 }
