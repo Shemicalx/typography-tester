@@ -5,24 +5,23 @@
   --color-grey-dark: #444;
   --color-white-normal: #FFF;
   --color-white-dark: #EEE;
+  --color-main: #0B525B;
+  --color-main-light: #1B626B;
+  --color-secondary: #312244;
+  --color-secondary-light: #413254;
 }
 
 body{
-  background-color: var(--color-grey-normal);
+  background-color: var(--color-main-light);
   margin: 0;
   color: var(--color-white-normal);
+  /* FIGURE OUT * /
+  font-family: 'Lobster', cursive;
+  /* */ 
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, p {
   margin: 0;
-}
-
-span {
-  /* temporary */
-  font-size: 10px;
-  letter-spacing: normal;
-  font-style: italic;
-  font-weight: lighter;
 }
 
 .App{
@@ -50,17 +49,56 @@ span {
 }
 
 .DisplayBlock {
+  position: relative;
   background-color: var(--color-white-normal);
   max-height: 49.8vh;
   color: var(--color-grey-dark);
   overflow-wrap: break-word;
   overflow: hidden;
-  transition: background-color 0.4s;
+  transition: 
+    color 0.3s,
+    text-shadow 0.5s,
+    background-color 0.5s;
 }
 
 .DisplayBlock:hover{
   cursor: pointer;
-  background-color: var(--color-white-dark);
+  background-color: var(--color-grey-light);
+  color: transparent;
+	text-shadow: 0 0 3px var(--color-grey-dark);
+}
+
+.DisplayBlock__HoverMenu {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  width: 100%;
+  left: 100%;
+  transition: all 0.7s;
+}
+
+.DisplayBlock__HoverMenu > button {
+  height: 100%;
+  width: 50%;
+  color: var(--color-white-normal);
+  font-size: 1.4rem;
+  background-color: var(--color-main);
+  opacity: 0.8;
+  border: none;
+  border-top: dotted 2px var(--color-main-light);
+  border-bottom: dotted 2px var(--color-main-light);
+  cursor: pointer;
+  outline: none;
+  transition: all 0.5s;
+}
+
+.DisplayBlock__HoverMenu > button:hover {
+  color: white;
+  font-size: 1.8rem;
+  width: 100%;
+  background-color: var(--color-main-light);
 }
 
 .SideBar {  
@@ -68,7 +106,7 @@ span {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #6666aacc;
+  background-color: var(--color-main);
 }
 
 .SideBar__Title {
@@ -83,11 +121,10 @@ span {
   font-size: 1rem;
   margin-bottom: 1rem;
   resize: none;
-  /* border: none; */
   outline: none;
 }
 
-.SideBar > div {
+.SideBar__RangeControls {
   width: 100%;
   display: flex;
   text-align: center;
@@ -97,12 +134,30 @@ span {
 
 .SideBar__InputsLabel {
   font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.2rem;
+}
+
+.SideBar__InputsLabel > span {
+  font-size: 0.6rem;
+  letter-spacing: normal;
+  font-style: italic;
+  font-weight: lighter;
+}
+
+.SideBar__MinMaxTitles {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.SideBar__MinMaxTitles > span {
+  font-size: 1rem;
+  width: 3rem;
+  margin: 0 2px;
 }
 
 .SideBar > div > div input{
   width: 3rem;
+  font-size: 0.8rem;
   color: var(--color-grey-dark);
   background-color: var(--color-white-normal);
   border: none;
