@@ -1,5 +1,7 @@
 import React from "react";
 import './App.css';
+import TestingSideBar from "./Components/TestingSideBar";
+import DisplayBlock from "./Components/DisplayBlock";
 require('dotenv').config();
 const WebFont = require("webfontloader");
 
@@ -12,7 +14,7 @@ class App extends React.Component {
     this.state = {
       text: "Lorem ipsum dolor sit amet, usu ea quis wisi. Pri ex justo soluta numquam, inani invidunt expetendis eu per. Te meis assueverit adversarium sea, ex illum blandit adolescens mel, ea mel graeco meliore scripserit. Nam fugit appareat ut, ad utamur senserit iudicabit vim, dico hendrerit ne vix.",
       fontFamilies: [],
-      fontProperties: {
+      fontRangeProperties: {
         /* To add new properties, add them here with a full range object -
         propertyName: {
           range: {
@@ -53,6 +55,18 @@ class App extends React.Component {
             intervals: 0,
             step: 0.1,
           }
+        },
+      },
+      fontToggleProperties: {
+        fontStyle: {
+          valueToToggle: "italic",
+          icon: "I",
+          toggle: false,
+        },
+        textAlign: {
+          valueToToggle: "center",
+          icon: "center",
+          toggle: false,
         },
       },
       showBlockMenu: [false,''],
@@ -107,9 +121,9 @@ class App extends React.Component {
     })
   };
 
-  handleFontPropertyChange = (propertyToUpdate, minOrMax, event) => {
+  handleFontRangePropertyChange = (propertyToUpdate, minOrMax, event) => {
     //Update min/max range properties based on minOrMax
-    let properties = this.state.fontProperties;
+    let properties = this.state.fontRangeProperties;
     properties[propertyToUpdate].range[minOrMax] = Number(event.target.value);
     //Calculate new intervals and make sure max and min stay together
     let {min, max, intervals, step} = properties[propertyToUpdate].range;
@@ -119,20 +133,28 @@ class App extends React.Component {
     intervals = (max - min) / 5;
     properties[propertyToUpdate].range = {min, max, intervals, step};
     this.setState({
-      fontProperties: properties,
+      fontRangeProperties: properties,
     });
   };
 
-  handleDisplayBlockKeepButton = (styleProperties , event) => {
-    let fontPropertiesUpdate = this.state.fontProperties;
+  handleFontTogglePropertyChange = (propertyToUpdate, event) => {
+    let properties = this.state.fontToggleProperties;
+    properties[propertyToUpdate].toggle = !properties[propertyToUpdate].toggle;
+    this.setState({
+      fontToggleProperties: properties
+    });
+  };
+
+  handleDisplayBlockKeepButton = (styleProperties, event) => {
+    let fontRangePropertiesUpdate = this.state.fontRangeProperties;
     Object.entries(styleProperties).forEach(([propertyToUpdate, value]) => {
       if(propertyToUpdate !== 'fontFamily'){
-        fontPropertiesUpdate[propertyToUpdate].range.min = Number(parseFloat(value).toFixed(2));
-        fontPropertiesUpdate[propertyToUpdate].range.max = Number(parseFloat(value).toFixed(2));
-        fontPropertiesUpdate[propertyToUpdate].range.intervals = 0;
+        fontRangePropertiesUpdate[propertyToUpdate].range.min = Number(parseFloat(value).toFixed(2));
+        fontRangePropertiesUpdate[propertyToUpdate].range.max = Number(parseFloat(value).toFixed(2));
+        fontRangePropertiesUpdate[propertyToUpdate].range.intervals = 0;
       }
     });
-    this.setState(fontPropertiesUpdate);
+    this.setState(fontRangePropertiesUpdate);
     this.setState({
       eachBlocksFont: this.state.eachBlocksFont.fill(styleProperties.fontFamily)
     });
@@ -157,10 +179,12 @@ class App extends React.Component {
       <main className="App">
         <TestingSideBar 
           handleTextAreaChange={this.handleTextAreaChange}
-          handleFontPropertyChange={this.handleFontPropertyChange}
+          handleFontRangePropertyChange={this.handleFontRangePropertyChange}
+          handleFontTogglePropertyChange={this.handleFontTogglePropertyChange}
           fontFamilies={this.state.fontFamilies}
           fontSizeRange={this.state.fontSizeRange}
-          fontProperties={this.state.fontProperties}
+          fontRangeProperties={this.state.fontRangeProperties}
+          fontToggleProperties={this.state.fontToggleProperties}
         />
         <div className="App__Display">
           <section className="App__DisplayGrid">
@@ -168,16 +192,22 @@ class App extends React.Component {
               [...Array(6)].map( (_ , index) => {
                 //Function to calculate the value of each blocks property based on interval
                 const calculateBlockProperty = (property) => {
-                  const min = this.state.fontProperties[property].range.min;
-                  const intervalsToAdd = this.state.fontProperties[property].range.intervals * (index);
+                  const min = this.state.fontRangeProperties[property].range.min;
+                  const intervalsToAdd = this.state.fontRangeProperties[property].range.intervals * (index);
                   return min + intervalsToAdd;
                 };
                 //Create a style object to implement each interval based value onto each block
-                const styleProperties = {};
-                Object.keys(this.state.fontProperties).forEach((property) => {
-                  styleProperties[property] = calculateBlockProperty(property)
+                const styleRangeProperties = {};
+                const styleToggleProperties = {};
+                Object.keys(this.state.fontRangeProperties).forEach(property => {
+                  styleRangeProperties[property] = calculateBlockProperty(property)
                 });
-
+                Object.keys(this.state.fontToggleProperties).forEach(property => {
+                  if(this.state.fontToggleProperties[property].toggle){
+                    styleToggleProperties[property] = this.state.fontToggleProperties[property].valueToToggle;
+                  }
+                });
+                
                 return (
                   <DisplayBlock 
                     blockNumber={index}
@@ -186,7 +216,8 @@ class App extends React.Component {
                     handleClick={this.handleDisplayBlockKeepButton}
                     handleHover={this.handleDisplayBlockHover}
                     handleDropDown={this.handleDisplayBlockDropDown}
-                    styleProperties={styleProperties}
+                    styleRangeProperties={styleRangeProperties}
+                    styleToggleProperties={styleToggleProperties}
                     showBlockMenu={this.state.showBlockMenu}
                     eachBlocksFont={this.state.eachBlocksFont}
                   />
@@ -198,130 +229,6 @@ class App extends React.Component {
       </main>
     );
   }
-}
-
-const DisplayBlock = (props) => {
-
-  let textStyle = props.styleProperties;
-  textStyle.fontFamily = props.eachBlocksFont[props.blockNumber];
-
-  return (
-  <div 
-    className="DisplayBlock" 
-    onMouseEnter={(e)=>props.handleHover(props.blockNumber, true, e)}
-    onMouseLeave={(e)=>props.handleHover(props.blockNumber, false, e)}
-  >
-    <div 
-      className="DisplayBlock__HoverMenu" 
-      style={ props.showBlockMenu[0] && props.blockNumber === props.showBlockMenu[1] ? {"left": "0%"} : {"left": "-50%"}}
-    >
-      <button className="DisplayBlock__Button">
-        Info
-      </button>
-      <button className="DisplayBlock__Button">
-        <select 
-          className="DisplayBlock__DropDown"
-          onChange={(e)=>props.handleDropDown(props.blockNumber, e)}
-          value={props.eachBlocksFont[props.blockNumber]}
-          style={{"fontFamily": textStyle.fontFamily}}
-        >
-          {
-            props.fontFamilies.map( family => {
-              return (
-                <option 
-                  value={family} 
-                  style={{'fontFamily': family}}
-                >
-                  {family}
-                </option>
-              );
-            })
-          }
-        </select>
-      </button>
-      <button
-        className="DisplayBlock__Button"
-        onClick={(e)=>props.handleClick(props.styleProperties, e)}
-      >
-        Keep
-      </button>
-    </div>
-    <p style={textStyle}>{props.content}</p>
-  </div>
-  )
-}
-
-const TestingSideBar = (props) => {
-
-  return (
-    <div className="SideBar">
-      <h1 className="SideBar__Title">
-        Typography Grid Tester
-      </h1>
-      <textarea 
-        className="SideBar__TextArea"
-        rows="10"
-        cols="35"
-        placeholder="Write something!"
-        onChange={props.handleTextAreaChange} 
-      />
-      <div className="SideBar__MinMaxTitles">
-        <span>
-          Min
-        </span>
-        <span>
-          Max
-        </span>
-      </div>
-      {
-        Object.entries(props.fontProperties).map(([propertyName, propertyObj]) => {
-          return (
-            <FontPropertyControls 
-              property={propertyName} 
-              range={propertyObj.range}
-              fontPropertyChangeHandler={props.handleFontPropertyChange}
-            />      
-          )    
-        })
-      }
-    </div>
-  )
-}
-
-const FontPropertyControls = (props) => {
-
-  const property = props.property;
-  const propertyNameCapitalized = property.replace(/[a-z]{1}/i, char => char.toUpperCase());
-  const {min, max, step} = props.range;
-
-  return (
-    <div className={`SideBar__${propertyNameCapitalized}Range SideBar__RangeControls`}>
-      <label className="SideBar__InputsLabel">
-        {propertyNameCapitalized.replace(/([a-z])([A-Z])/g, '$1 $2')}
-        <span>{property === 'lineHeight' ? ' relative' : ' pixels' }</span>
-      </label>
-      <div className="SideBar__Inputs">
-        <input
-          className={`SideBar__${propertyNameCapitalized}Min`}
-          min="0" 
-          type="number" 
-          step={step}
-          title={`Set minimum ${property}`}
-          value={min}
-          onChange={(e)=>props.fontPropertyChangeHandler(property, 'min' , e)}
-        />
-        <input 
-          className={`SideBar__${propertyNameCapitalized}Max`}
-          min="0"
-          type="number" 
-          step={step}
-          title={`Set maximum ${property}`} 
-          value={max}
-          onChange={(e)=>props.fontPropertyChangeHandler(property, 'max', e)}
-        />
-      </div>
-    </div>
-  )
 }
 
 export default App;
