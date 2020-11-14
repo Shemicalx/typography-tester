@@ -1,5 +1,5 @@
 :root{
-  font-size: 16px;
+  font-size: 20px;
   --color-grey-normal: #AAA;
   --color-grey-light: #CCC;
   --color-grey-dark: #444;
@@ -15,8 +15,8 @@ body{
   background-color: var(--color-main-light);
   margin: 0;
   color: var(--color-white-normal);
-  /* FIGURE OUT * /
-  font-family: 'Lobster', cursive;
+  /* */
+  font-family: "Times New Roman", Times, serif;
   /* */ 
 }
 
@@ -76,10 +76,11 @@ h1, h2, h3, h4, h5, h6, p {
   height: 100%;
   width: 100%;
   left: 100%;
-  transition: all 0.7s;
+  transition: left 0.7s;
 }
 
-.DisplayBlock__HoverMenu > button {
+.DisplayBlock__Button {
+  text-align: start;
   height: 100%;
   width: 50%;
   color: var(--color-white-normal);
@@ -89,16 +90,33 @@ h1, h2, h3, h4, h5, h6, p {
   border: none;
   border-top: dotted 2px var(--color-main-light);
   border-bottom: dotted 2px var(--color-main-light);
-  cursor: pointer;
   outline: none;
   transition: all 0.5s;
 }
 
-.DisplayBlock__HoverMenu > button:hover {
+.DisplayBlock__Button:hover {
   color: white;
   font-size: 1.8rem;
   width: 100%;
   background-color: var(--color-main-light);
+  cursor: pointer;
+}
+
+.DisplayBlock__DropDown {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-main);
+  color: var(--color-white-normal);
+  font-size: 1.4rem;
+  border: none;
+  outline: none;
+  transition: all 0.5s;
+}
+
+.DisplayBlock__DropDown:hover {
+  font-size: 1.8rem;
+  background-color: var(--color-main-light);
+  cursor: pointer;
 }
 
 .SideBar {  

@@ -1,19 +1,17 @@
 import React from "react";
 import './App.css';
+require('dotenv').config();
 const WebFont = require("webfontloader");
 
-/* FIGURE OUT * /
-WebFont.load({
-  google: {
-    families: ['Lobster']
-  }
-});
-/* */
+//Need to figure out how to hide the key(.env file gave me some trouble)
+// const googleFontsApiRequest = `https://www.googleapis.com/webfonts/v1/webfonts?key=${process.env.GOOGLE_WEBFONTS_KEY}`;
+
 class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
       text: "Lorem ipsum dolor sit amet, usu ea quis wisi. Pri ex justo soluta numquam, inani invidunt expetendis eu per. Te meis assueverit adversarium sea, ex illum blandit adolescens mel, ea mel graeco meliore scripserit. Nam fugit appareat ut, ad utamur senserit iudicabit vim, dico hendrerit ne vix.",
+      fontFamilies: [],
       fontProperties: {
         /* To add new properties, add them here with a full range object -
         propertyName: {
@@ -58,7 +56,49 @@ class App extends React.Component {
         },
       },
       showBlockMenu: [false,''],
+      eachBlocksFont: [
+        "-select font-",
+        "-select font-",
+        "-select font-",
+        "-select font-",
+        "-select font-",
+        "-select font-"
+      ],
     }
+  }
+
+  fetchGoogleFontsFamilies = () => {
+    //Very slow load atm. Need to figure out a better way.
+    /* * /
+    fetch(googleFontsApiRequest)
+    .then(response => response.json())
+    .then(data => {
+      const fontFamiliesFetched = data.items.map(datum => datum.family)
+      this.setState({
+        fontFamilies: fontFamiliesFetched
+      });
+      WebFont.load({
+        google: {
+          families: fontFamiliesFetched
+        }
+      });
+    });
+    /* */
+
+    //TEMP SOLUTION
+    const fontFamiliesFetched = ["-select font-","ABeeZee", "Abel", "Abhaya Libre", "Abril Fatface", "Aclonica", "Acme", "Actor", "Adamina", "Advent Pro", "Aguafina Script", "Akronim", "Aladin", "Alata", "Alatsi", "Aldrich", "Alef", "Alegreya", "Alegreya SC", "Alegreya Sans", "Alegreya Sans SC", "Aleo", "Alex Brush", "Alfa Slab One", "Alice", "Alike", "Alike Angular", "Allan", "Allerta", "Allerta Stencil", "Allura", "Almarai", "Almendra", "Almendra Display", "Almendra SC", "Amarante", "Amaranth", "Amatic SC", "Amethysta", "Amiko", "Amiri", "Amita", "Anaheim", "Andada", "Andika", "Angkor", "Annie Use Your Telescope", "Anonymous Pro", "Antic", "Antic Didone", "Antic Slab", "Anton", "Arapey", "Arbutus", "Arbutus Slab", "Architects Daughter", "Archivo", "Archivo Black", "Archivo Narrow", "Aref Ruqaa", "Arima Madurai", "Arimo", "Arizonia", "Armata", "Arsenal", "Artifika", "Arvo", "Arya", "Asap", "Asap Condensed", "Asar", "Asset", "Assistant", "Astloch", "Asul", "Athiti", "Atma", "Atomic Age", "Aubrey", "Audiowide", "Autour One", "Average", "Average Sans", "Averia Gruesa Libre", "Averia Libre", "Averia Sans Libre", "Averia Serif Libre", "B612", "B612 Mono", "Bad Script", "Bahiana", "Bahianita", "Bai Jamjuree"];
+      this.setState({
+        fontFamilies: fontFamiliesFetched
+      });
+      WebFont.load({
+        google: {
+          families: fontFamiliesFetched
+        }
+      });
+  }
+
+  componentDidMount(){
+    this.fetchGoogleFontsFamilies();
   }
 
   handleTextAreaChange = (event) => {
@@ -83,19 +123,32 @@ class App extends React.Component {
     });
   };
 
-  handleDisplayBlockClick = (styleProperties , event) => {
+  handleDisplayBlockKeepButton = (styleProperties , event) => {
     let fontPropertiesUpdate = this.state.fontProperties;
     Object.entries(styleProperties).forEach(([propertyToUpdate, value]) => {
-      fontPropertiesUpdate[propertyToUpdate].range.min = Number(parseFloat(value).toFixed(2));
-      fontPropertiesUpdate[propertyToUpdate].range.max = Number(parseFloat(value).toFixed(2));
-      fontPropertiesUpdate[propertyToUpdate].range.intervals = 0;
+      if(propertyToUpdate !== 'fontFamily'){
+        fontPropertiesUpdate[propertyToUpdate].range.min = Number(parseFloat(value).toFixed(2));
+        fontPropertiesUpdate[propertyToUpdate].range.max = Number(parseFloat(value).toFixed(2));
+        fontPropertiesUpdate[propertyToUpdate].range.intervals = 0;
+      }
     });
     this.setState(fontPropertiesUpdate);
+    this.setState({
+      eachBlocksFont: this.state.eachBlocksFont.fill(styleProperties.fontFamily)
+    });
   };
+
+  handleDisplayBlockDropDown = (blockNumber, event) => {
+    console.log(blockNumber, event.target.value);
+    let eachBlocksFontUpdate = this.state.eachBlocksFont;
+    eachBlocksFontUpdate[blockNumber] = event.target.value;
+    this.setState({
+      eachBlocksFont: eachBlocksFontUpdate 
+    });
+  }
 
   handleDisplayBlockHover = (blockNumber, show, event) => {
     this.setState({showBlockMenu: [show, blockNumber]});
-    console.log(this.state.showBlockMenu);
   }
 
   render() {
@@ -105,6 +158,7 @@ class App extends React.Component {
         <TestingSideBar 
           handleTextAreaChange={this.handleTextAreaChange}
           handleFontPropertyChange={this.handleFontPropertyChange}
+          fontFamilies={this.state.fontFamilies}
           fontSizeRange={this.state.fontSizeRange}
           fontProperties={this.state.fontProperties}
         />
@@ -128,10 +182,13 @@ class App extends React.Component {
                   <DisplayBlock 
                     blockNumber={index}
                     content={this.state.text} 
-                    handleClick={this.handleDisplayBlockClick}
+                    fontFamilies={this.state.fontFamilies}
+                    handleClick={this.handleDisplayBlockKeepButton}
                     handleHover={this.handleDisplayBlockHover}
+                    handleDropDown={this.handleDisplayBlockDropDown}
                     styleProperties={styleProperties}
                     showBlockMenu={this.state.showBlockMenu}
+                    eachBlocksFont={this.state.eachBlocksFont}
                   />
                 )
               })
@@ -144,10 +201,13 @@ class App extends React.Component {
 }
 
 const DisplayBlock = (props) => {
+
+  let textStyle = props.styleProperties;
+  textStyle.fontFamily = props.eachBlocksFont[props.blockNumber];
+
   return (
   <div 
     className="DisplayBlock" 
-    onClick={(e)=>props.handleClick(props.styleProperties, e)}
     onMouseEnter={(e)=>props.handleHover(props.blockNumber, true, e)}
     onMouseLeave={(e)=>props.handleHover(props.blockNumber, false, e)}
   >
@@ -155,17 +215,38 @@ const DisplayBlock = (props) => {
       className="DisplayBlock__HoverMenu" 
       style={ props.showBlockMenu[0] && props.blockNumber === props.showBlockMenu[1] ? {"left": "0%"} : {"left": "-50%"}}
     >
-      <button>
+      <button className="DisplayBlock__Button">
         Info
       </button>
-      <button>
-        placeholder
+      <button className="DisplayBlock__Button">
+        <select 
+          className="DisplayBlock__DropDown"
+          onChange={(e)=>props.handleDropDown(props.blockNumber, e)}
+          value={props.eachBlocksFont[props.blockNumber]}
+          style={{"fontFamily": textStyle.fontFamily}}
+        >
+          {
+            props.fontFamilies.map( family => {
+              return (
+                <option 
+                  value={family} 
+                  style={{'fontFamily': family}}
+                >
+                  {family}
+                </option>
+              );
+            })
+          }
+        </select>
       </button>
-      <button>
+      <button
+        className="DisplayBlock__Button"
+        onClick={(e)=>props.handleClick(props.styleProperties, e)}
+      >
         Keep
       </button>
     </div>
-    <p style={props.styleProperties}>{props.content}</p>
+    <p style={textStyle}>{props.content}</p>
   </div>
   )
 }
@@ -173,7 +254,7 @@ const DisplayBlock = (props) => {
 const TestingSideBar = (props) => {
 
   return (
-    <nav className="SideBar">
+    <div className="SideBar">
       <h1 className="SideBar__Title">
         Typography Grid Tester
       </h1>
@@ -203,7 +284,7 @@ const TestingSideBar = (props) => {
           )    
         })
       }
-    </nav>
+    </div>
   )
 }
 
