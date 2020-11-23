@@ -4,9 +4,13 @@ import FontPropertyToggleControls from './ControlsComponents/FontPropertyToggleC
 const TestingSideBar = (props) => {
 
     return (
-      <div className="SideBar">
+      <div 
+        className="SideBar"
+        style={props.showSideBar ? {"left": "0%"} : {"left": "-350px"}}
+      >
         <h1 className="SideBar__Title">
-          Typography Tester
+          Typography<br /> 
+          Grid Tester
         </h1>
         <textarea 
           className="SideBar__TextArea"
@@ -42,8 +46,7 @@ const TestingSideBar = (props) => {
             return (
               <FontPropertyToggleControls 
                 property={propertyName} 
-                valueToToggle={propertyObj.valueToToggle}
-                icon={propertyObj.icon}
+                propertyObj={propertyObj}
                 handleFontTogglePropertyChange={props.handleFontTogglePropertyChange}
               />      
             )    

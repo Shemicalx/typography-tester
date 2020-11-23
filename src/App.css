@@ -7,6 +7,7 @@
   --color-white-dark: #EEE;
   --color-main: #0B525B;
   --color-main-light: #1B626B;
+  --color-main-very-light: #3B828B;
   --color-secondary: #312244;
   --color-secondary-light: #413254;
 }
@@ -20,8 +21,13 @@ body{
   /* */ 
 }
 
-h1, h2, h3, h4, h5, h6, p {
+h1, h2, h3, h4, h5, h6, p, li {
   margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style-type: none;
 }
 
 .App{
@@ -36,6 +42,7 @@ h1, h2, h3, h4, h5, h6, p {
   padding: 0 2px;
   flex-direction: column;
   align-items: center;
+  transition: margin 0.6s;
 }
 
 .App__DisplayGrid {
@@ -54,6 +61,7 @@ h1, h2, h3, h4, h5, h6, p {
   max-height: 49.8vh;
   color: var(--color-grey-dark);
   overflow-wrap: break-word;
+  white-space: pre-wrap;
   overflow: hidden;
   transition: 
     color 0.3s,
@@ -106,6 +114,17 @@ h1, h2, h3, h4, h5, h6, p {
   cursor: pointer;
 }
 
+.DisplayBlock__Info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  text-align: center;
+  font-size: 1rem;
+  margin: 0;
+  padding: 20px;
+}
+
 .DisplayBlock__DropDown {
   width: 100%;
   height: 100%;
@@ -123,34 +142,99 @@ h1, h2, h3, h4, h5, h6, p {
   cursor: pointer;
 }
 
+.App__SideBarToggle{
+  position: absolute;
+  background-color: transparent;
+  left: 0.6rem;
+  top: 0.6rem;
+  height: 4rem;
+  width: 4rem;
+  outline: none;
+  border: none;
+  box-shadow: 0 0 0 0 var(--color-main-very-light);
+  cursor: pointer;
+  z-index: 2;
+}
+
+.App__SideBarToggle::after, 
+.App__SideBarToggle::before {
+  transition: all 0.4s;
+}
+
+.App__SideBarToggle__X::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 0.45rem;
+  width: 4rem;
+  background-color: var(--color-main-very-light);
+  transform: 
+    translate(0, 1.6rem)
+    rotate(45deg);
+}
+
+.App__SideBarToggle__X::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 0.45rem;
+  width: 4rem;
+  background-color: var(--color-main-very-light);
+  transform: 
+    translate(0, 1.6rem)
+    rotate(135deg);
+}
+
+.App__SideBarToggle__Burger::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 0.45rem;
+  width: 4rem;
+  background-color: var(--color-main-very-light);
+  box-shadow: 
+    0 1.6rem 0 0 var(--color-main-very-light),
+    0 0.8rem 0 0 var(--color-main-very-light);
+}
+
 .SideBar {  
-  padding: 0 1rem;
-  position: relative;
+  position: absolute;
   display: flex;
-  width: 25%;
+  width: 350px;
+  min-width: 350px;
+  height: 100vh;
+  left: 0;
+  top: 0;
+  bottom: 0;
   flex-direction: column;
-  align-items: center;
+  z-index: 1;
   background-color: var(--color-main);
+  transition: left 0.6s;
 }
 
 .SideBar__Title {
-  font-size: 2.4rem;
+  font-size: 2rem;
   text-align: center;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
+  /* margin-top: 1rem;
+  margin-bottom: 2rem; */
+  margin: 1rem 5rem;
 }
 
 .SideBar__TextArea {
   background-color: var(--color-white-normal);
   color: var(--color-grey-dark);
   font-size: 1.2rem;
-  margin-bottom: 1rem;
+  margin: 1rem;
   resize: none;
   outline: none;
 }
 
 .SideBar__RangeControls {
-  width: 100%;
+  width: 92%;
+  margin: 0.2rem 1rem;
   display: flex;
   text-align: center;
   justify-content: space-between;
@@ -159,9 +243,18 @@ h1, h2, h3, h4, h5, h6, p {
 
 .SideBar__ToggleControls {
   width: 100%;
+  margin: 1rem 0;
   display: flex;
   justify-content: space-evenly;
-  margin: 1rem;
+  align-items: stretch;
+}
+
+.SideBar__ToggleButton {
+  color: var(--color-white-normal);
+  font-size: 1.2rem;
+  background-color: var(--color-main-light);
+  border: var(--color-white-dark) 1px solid;
+  outline: none;
 }
 
 .SideBar__InputsLabel {
@@ -170,7 +263,7 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 .SideBar__InputsLabel > span {
-  font-size: 0.6rem;
+  font-size: 0.8rem;
   letter-spacing: normal;
   font-style: italic;
   font-weight: lighter;
@@ -209,9 +302,5 @@ input[type=number]::-webkit-inner-spin-button {
 
   .DisplayBlock {
     max-height: 33.1vh;
-  }
-  
-  .SideBar {
-    width: 35%;
   }
 }
