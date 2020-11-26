@@ -13,7 +13,7 @@ const FontPropertyControls = (props) => {
       <div className="SideBar__Inputs">
         <input
           className={`SideBar__${propertyNameCapitalized}Min`}
-          min="0" 
+          // min="0" 
           type="number" 
           step={step}
           title={`Set minimum ${property}`}
@@ -22,7 +22,7 @@ const FontPropertyControls = (props) => {
         />
         <input 
           className={`SideBar__${propertyNameCapitalized}Max`}
-          min="0"
+          // min="0"
           type="number" 
           step={step}
           title={`Set maximum ${property}`} 
