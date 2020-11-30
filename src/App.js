@@ -17,14 +17,14 @@ class App extends React.Component {
       Nullam placerat a lectus a laoreet. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Morbi consectetur ullamcorper nibh nec faucibus. Sed elementum justo a dolor tristique tristique eu in ligula. Phasellus tempor hendrerit augue id suscipit. Vivamus bibendum vehicula pellentesque. Morbi dignissim enim facilisis dolor blandit, nec molestie turpis eleifend. Suspendisse varius sed ipsum in suscipit. Vivamus accumsan erat ut nisi pellentesque, eu iaculis arcu tristique. Etiam luctus, eros bibendum mattis accumsan, metus tortor sollicitudin tortor, non auctor quam nisi at odio.
       
       Donec ac ipsum dui. Aenean dictum iaculis tortor at aliquam. Donec dolor odio, mattis non congue at, euismod et enim. Integer rhoncus consequat turpis vitae egestas. Sed auctor vehicula quam ut gravida. Duis nisl libero, tempor quis est ut, posuere vestibulum tortor. Phasellus id dapibus elit. Sed pharetra posuere suscipit. Quisque in ipsum non diam tempus laoreet sed sit amet nulla. Praesent ac leo eget diam egestas pellentesque. Mauris feugiat ligula eget sapien bibendum condimentum. Mauris quis nisi enim. Donec feugiat, elit eget efficitur vulputate, sapien massa pretium felis, eget ullamcorper eros sapien nec libero. Quisque vulputate lorem eget erat consectetur eleifend. Aenean odio velit, luctus eleifend maximus ac, mollis a odio. Nam eu est dignissim, maximus sem nec, facilisis dolor.`,
-      grids: [...Array(6)],
+      grids: window.innerWidth > 1300 ? [...Array(9)] : [...Array(6)],
       fontFamilies: [],
       fontRangeProperties: {
         fontSize: {
           range: {
             min: 12,
-            max: 12,
-            intervals: 0,
+            max: 20,
+            intervals: 8 / (window.innerWidth > 1300 ? 9 - 1 : 6 - 1),
             step: 1,
           }
         },
@@ -73,6 +73,7 @@ class App extends React.Component {
       },
       showBlockMenu: [false,''],
       showInformationSection: [false,''],
+      showKeepSection: [false,''],
       eachBlocksFont: [],
       showSideBar: true,
     }
@@ -112,6 +113,7 @@ class App extends React.Component {
     this.fetchGoogleFontsFamilies();
     this.setState({
       eachBlocksFont: this.state.grids.fill("-No Font Selected-"),
+
     })
   }
 
@@ -166,6 +168,21 @@ class App extends React.Component {
     });
   };
 
+  handleKeepMenuButtonClick = (styleProperties, event) => {
+    let fontRangePropertiesUpdate = this.state.fontRangeProperties;
+    Object.entries(styleProperties).forEach(([propertyToUpdate, value]) => {
+      if(propertyToUpdate !== 'fontFamily'){
+        fontRangePropertiesUpdate[propertyToUpdate].range.min = Number(parseFloat(value).toFixed(2));
+        fontRangePropertiesUpdate[propertyToUpdate].range.max = Number(parseFloat(value).toFixed(2));
+        fontRangePropertiesUpdate[propertyToUpdate].range.intervals = 0;
+      }
+    });
+    this.setState(fontRangePropertiesUpdate);
+    this.setState({
+      eachBlocksFont: this.state.grids.fill(styleProperties.fontFamily)
+    });
+  };
+
   handleFontDropDown = (blockNumber, event) => {
     let eachBlocksFontUpdate = this.state.eachBlocksFont;
     eachBlocksFontUpdate[blockNumber] = event.target.value;
@@ -178,12 +195,21 @@ class App extends React.Component {
     this.setState({
       showBlockMenu: [show, blockNumber],
       showInformationSection: [false,''],
+      showKeepSection: [false,''],
     });
   }
   
   handleInformationButtonClick = (blockNumber, show, event) => {
     this.setState({
       showInformationSection: [show, blockNumber],
+      showKeepSection: [false,''],
+    });
+  }
+  
+  handleKeepButtonClick = (blockNumber, show, event) => {
+    this.setState({
+      showKeepSection: [show, blockNumber],
+      showInformationSection: [false,''],
     });
   }
   
@@ -265,11 +291,14 @@ class App extends React.Component {
                     handleHover={this.handleDisplayBlockHover}
                     handleDropDown={this.handleDisplayBlockDropDown}
                     handleInformationButtonClick={this.handleInformationButtonClick}
+                    handleKeepButtonClick={this.handleKeepButtonClick}
+                    handleKeepMenuButtonClick={this.handleKeepMenuButtonClick}
                     handleCopyCSSButtonClick={this.handleCopyCSSButtonClick}
                     styleRangeProperties={styleRangeProperties}
                     styleToggleProperties={styleToggleProperties}
                     showBlockMenu={this.state.showBlockMenu}
                     showInformationSection={this.state.showInformationSection}
+                    showKeepSection={this.state.showKeepSection}
                     eachBlocksFont={this.state.eachBlocksFont}
                   />
                 )

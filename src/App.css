@@ -5,11 +5,12 @@
   --color-grey-dark: #444;
   --color-white-normal: #FFF;
   --color-white-dark: #EEE;
-  --color-main: #0B525B;
-  --color-main-light: #1B626B;
-  --color-main-very-light: #3B828B;
-  --color-secondary: #312244;
-  --color-secondary-light: #413254;
+  --color-main: #0B525Be0;
+  --color-main-dark: #004050;
+  --color-main-light: #1B626Be0;
+  --color-main-very-light: #3B828Be0;
+  --color-secondary: #f07167;
+  --color-secondary-light: #fc8e86;
 }
 
 ::-webkit-scrollbar {
@@ -21,9 +22,6 @@ body{
   background-color: var(--color-main-light);
   margin: 0;
   color: var(--color-white-normal);
-  /* */
-  font-family: "Times New Roman", Times, serif;
-  /* */ 
 }
 
 h1, h2, h3, h4, h5, h6, p, li {
@@ -122,6 +120,10 @@ ul {
   cursor: pointer;
 }
 
+.DisplayBlock__InfoButton{
+  height: 100%;
+}
+
 .DisplayBlock__InfoSection {
   display: flex;
   flex-direction: column;
@@ -152,7 +154,7 @@ ul {
 .DisplayBlock__InfoSection__Show {
   height: 100%;
   width: 100%;
-  opacity: 0.7;
+  opacity: 0.8;
   border-top: dotted 2px var(--color-main-light);
   border-bottom: dotted 2px var(--color-main-light);
 }
@@ -160,6 +162,76 @@ ul {
 .DisplayBlock__InfoSection__FontFamily {
   font-size: 1.6rem;
   margin-bottom: 0.4rem;
+}
+
+.DisplayBlock__KeepSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 0%;
+  width: 50%;
+  color: white;
+  font-size: 1rem;
+  background-color: var(--color-main);
+  opacity: 0.9;
+  border: none;
+  border-top: dotted 0px var(--color-main-light);
+  border-bottom: dotted 0px var(--color-main-light);
+  outline: none;
+  overflow: hidden;
+  cursor: default;
+  transition: 
+    height 0.5s,
+    width 0.5s,
+    background-color 0.5s 0.5s,
+    opacity 0.5s 0.5s;
+}
+
+.DisplayBlock__KeepSection__Show {
+  background-color: var(--color-main);
+  height: 100%;
+  width: 100%;
+  opacity: 0.7;
+  border-bottom: dotted 2px var(--color-main-light);
+}
+
+.DisplayBlock__KeepSection__Instructions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  color: white;
+  background-color: var(--color-main-dark);
+  width: 100%;
+  height: 100%;
+  border: 0.2rem dotted var(--color-secondary-light);
+  transition: all 0.5s 0.5s;
+}
+
+.DisplayBlock__KeepSection > button {
+  color: var(--color-white-normal);
+  font-size: 1.2rem;
+  background-color: var(--color-main);
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  border: none;
+  outline: none;
+  transition: 
+    font-size 0.5s,
+    background-color 0.5s,
+    opacity 0.5s 0.5s;
+}
+
+.DisplayBlock__KeepSection > button:hover{
+  background-color: var(--color-main-very-light);
+  font-size: 1.3rem;
+  color: white;
+}
+
+.DisplayBlock__CopyCSSButton{
+  height: 50%;
 }
 
 .App__SideBarToggle{
@@ -188,7 +260,7 @@ ul {
   left: 0;
   height: 0.45rem;
   width: 4rem;
-  background-color: var(--color-main-very-light);
+  background-color: var(--color-secondary-light);
   transform: 
     translate(0, 1.6rem)
     rotate(45deg);
@@ -201,7 +273,7 @@ ul {
   left: 0;
   height: 0.45rem;
   width: 4rem;
-  background-color: var(--color-main-very-light);
+  background-color: var(--color-secondary-light);
   transform: 
     translate(0, 1.6rem)
     rotate(135deg);
@@ -214,10 +286,10 @@ ul {
   left: 0;
   height: 0.45rem;
   width: 4rem;
-  background-color: var(--color-main-very-light);
+  background-color: var(--color-secondary-light);
   box-shadow: 
-    0 1.6rem 0 0 var(--color-main-very-light),
-    0 0.8rem 0 0 var(--color-main-very-light);
+    0 1.6rem 0 0 var(--color-secondary-light),
+    0 0.8rem 0 0 var(--color-secondary-light);
 }
 
 .SideBar {  
