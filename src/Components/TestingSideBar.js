@@ -1,6 +1,6 @@
 import FontDropDownControls from './ControlsComponents/FontDropDownControls';
 import FontPropertyRangeControls from'./ControlsComponents/FontPropertyRangeControls';
-import FontPropertyToggleControls from './ControlsComponents/FontPropertyToggleControls';
+// import FontPropertyToggleControls from './ControlsComponents/FontPropertyToggleControls';
 
 const TestingSideBar = (props) => {
 
@@ -66,7 +66,14 @@ const TestingSideBar = (props) => {
             })
           }
         </div>
-        <div className="SideBar__DropDownControls">
+        <div className="SideBar__FontFamilyControls">
+          <div 
+            className="SideBar__FontFamiyControls__DropDowns"
+            style={{
+              "gridTemplateColumns": `repeat(${props.grids.length % 3 ? props.grids.length / 2 : props.grids.length / 3}, 1fr)`,
+              "gridTemplateRows": `repeat(${props.grids.length % 3 ?  2 : 3}, 1fr)`
+            }}
+          >
           {
             props.grids.map((_, index) => {
               return (
@@ -79,6 +86,13 @@ const TestingSideBar = (props) => {
               )
             })
           }
+          </div>
+          <button 
+            className="SideBar__FontFamilyControls__RandomAll"
+            onClick={props.handleRandomizeAllFonts}
+          >
+            Randomize All Fonts
+          </button>
         </div>
       </div>
     )

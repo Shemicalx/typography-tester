@@ -2,11 +2,11 @@ import React from "react";
 import './App.css';
 import TestingSideBar from "./Components/TestingSideBar";
 import DisplayBlock from "./Components/DisplayBlock";
-require('dotenv').config();
+require('dotenv').config({path: './.env'});
 const WebFont = require("webfontloader");
 
 //Need to figure out how to hide the key(.env file gave me some trouble)
-// const googleFontsApiRequest = `https://www.googleapis.com/webfonts/v1/webfonts?key=`;
+const googleFontsApiRequest = `https://www.googleapis.com/webfonts/v1/webfonts?key=${process.env.REACT_APP_API_KEY}`;
 
 class App extends React.Component {
   constructor(props){
@@ -81,24 +81,23 @@ class App extends React.Component {
 
   fetchGoogleFontsFamilies = () => {
     //Very slow load atm. Need to figure out a better way.
-    /* * /
-    fetch(googleFontsApiRequest)
-    .then(response => response.json())
-    .then(data => {
-      const fontFamiliesFetched = data.items.map(datum => datum.family)
-      this.setState({
-        fontFamilies: fontFamiliesFetched
-      });
-      WebFont.load({
-        google: {
-          families: fontFamiliesFetched
-        }
-      });
-    });
     /* */
-
-    //TEMP SOLUTION
-    const fontFamiliesFetched = ["-No Font Selected-","ABeeZee", "Abel", "Abhaya Libre", "Abril Fatface", "Aclonica", "Acme", "Actor", "Adamina", "Advent Pro", "Aguafina Script", "Akronim", "Aladin", "Alata", "Alatsi", "Aldrich", "Alef", "Alegreya", "Alegreya SC", "Alegreya Sans", "Alegreya Sans SC", "Aleo", "Alex Brush", "Alfa Slab One", "Alice", "Alike", "Alike Angular", "Allan", "Allerta", "Allerta Stencil", "Allura", "Almarai", "Almendra", "Almendra Display", "Almendra SC", "Amarante", "Amaranth", "Amatic SC", "Amethysta", "Amiko", "Amiri", "Amita", "Anaheim", "Andada", "Andika", "Angkor", "Annie Use Your Telescope", "Anonymous Pro", "Antic", "Antic Didone", "Antic Slab", "Anton", "Arapey", "Arbutus", "Arbutus Slab", "Architects Daughter", "Archivo", "Archivo Black", "Archivo Narrow", "Aref Ruqaa", "Arima Madurai", "Arimo", "Arizonia", "Armata", "Arsenal", "Artifika", "Arvo", "Arya", "Asap", "Asap Condensed", "Asar", "Asset", "Assistant", "Astloch", "Asul", "Athiti", "Atma", "Atomic Age", "Aubrey", "Audiowide", "Autour One", "Average", "Average Sans", "Averia Gruesa Libre", "Averia Libre", "Averia Sans Libre", "Averia Serif Libre", "B612", "B612 Mono", "Bad Script", "Bahiana", "Bahianita", "Bai Jamjuree"];
+    try {
+      fetch(googleFontsApiRequest)
+      .then(response => response.json())
+      .then(data => {
+        const fontFamiliesFetched = data.items.map(datum => datum.family)
+        this.setState({
+          fontFamilies: ["-No Font Selected-",...fontFamiliesFetched]
+        });
+        WebFont.load({
+          google: {
+            families: fontFamiliesFetched
+          }
+        });
+      });
+    } catch (error) {
+      const fontFamiliesFetched = ["-No Font Selected-","ABeeZee", "Abel", "Abhaya Libre", "Abril Fatface", "Aclonica", "Acme", "Actor", "Adamina", "Advent Pro", "Aguafina Script", "Akronim", "Aladin", "Alata", "Alatsi", "Aldrich", "Alef", "Alegreya", "Alegreya SC", "Alegreya Sans", "Alegreya Sans SC", "Aleo", "Alex Brush", "Alfa Slab One", "Alice", "Alike", "Alike Angular", "Allan", "Allerta", "Allerta Stencil", "Allura", "Almarai", "Almendra", "Almendra Display", "Almendra SC", "Amarante", "Amaranth", "Amatic SC", "Amethysta", "Amiko", "Amiri", "Amita", "Anaheim", "Andada", "Andika", "Angkor", "Annie Use Your Telescope", "Anonymous Pro", "Antic", "Antic Didone", "Antic Slab", "Anton", "Arapey", "Arbutus", "Arbutus Slab", "Architects Daughter", "Archivo", "Archivo Black", "Archivo Narrow", "Aref Ruqaa", "Arima Madurai", "Arimo", "Arizonia", "Armata", "Arsenal", "Artifika", "Arvo", "Arya", "Asap", "Asap Condensed", "Asar", "Asset", "Assistant", "Astloch", "Asul", "Athiti", "Atma", "Atomic Age", "Aubrey", "Audiowide", "Autour One", "Average", "Average Sans", "Averia Gruesa Libre", "Averia Libre", "Averia Sans Libre", "Averia Serif Libre", "B612", "B612 Mono", "Bad Script", "Bahiana", "Bahianita", "Bai Jamjuree"];
       this.setState({
         fontFamilies: fontFamiliesFetched
       });
@@ -107,6 +106,7 @@ class App extends React.Component {
           families: fontFamiliesFetched
         }
       });
+    }
   }
 
   componentDidMount(){
@@ -135,9 +135,6 @@ class App extends React.Component {
     properties[propertyToUpdate].range[minOrMax] = Number(event.target.value);
     //Calculate new intervals and make sure max and min stay together
     let {min, max, intervals, step} = properties[propertyToUpdate].range;
-    if(max < min) {
-      max = min;
-    }
     intervals = (max - min) / (this.state.grids.length - 1);
     properties[propertyToUpdate].range = {min, max, intervals, step};
     this.setState({
@@ -153,21 +150,6 @@ class App extends React.Component {
     });
   };
 
-  handleDisplayBlockKeepButton = (styleProperties, event) => {
-    let fontRangePropertiesUpdate = this.state.fontRangeProperties;
-    Object.entries(styleProperties).forEach(([propertyToUpdate, value]) => {
-      if(propertyToUpdate !== 'fontFamily'){
-        fontRangePropertiesUpdate[propertyToUpdate].range.min = Number(parseFloat(value).toFixed(2));
-        fontRangePropertiesUpdate[propertyToUpdate].range.max = Number(parseFloat(value).toFixed(2));
-        fontRangePropertiesUpdate[propertyToUpdate].range.intervals = 0;
-      }
-    });
-    this.setState(fontRangePropertiesUpdate);
-    this.setState({
-      eachBlocksFont: this.state.grids.fill(styleProperties.fontFamily)
-    });
-  };
-
   handleKeepMenuButtonClick = (styleProperties, event) => {
     let fontRangePropertiesUpdate = this.state.fontRangeProperties;
     Object.entries(styleProperties).forEach(([propertyToUpdate, value]) => {
@@ -175,13 +157,29 @@ class App extends React.Component {
         fontRangePropertiesUpdate[propertyToUpdate].range.min = Number(parseFloat(value).toFixed(2));
         fontRangePropertiesUpdate[propertyToUpdate].range.max = Number(parseFloat(value).toFixed(2));
         fontRangePropertiesUpdate[propertyToUpdate].range.intervals = 0;
+      } else {
+        this.setState({
+          eachBlocksFont: this.state.grids.fill(styleProperties.fontFamily)
+        });
       }
     });
     this.setState(fontRangePropertiesUpdate);
-    this.setState({
-      eachBlocksFont: this.state.grids.fill(styleProperties.fontFamily)
-    });
   };
+
+  handleRandomizeAllFonts = (event) => {
+    let randomFonts = [...Array(this.state.grids.length)];
+    randomFonts.forEach((_, index, randomFontsArray) => {
+      for(let i = 0; i < this.state.fontFamilies.length; i++){
+        const font = this.state.fontFamilies[Math.floor(Math.random() * this.state.fontFamilies.length)];
+        if(!randomFontsArray.includes(font)){
+          randomFonts[index] = font;
+        }
+      }
+    });
+    this.setState({
+      eachBlocksFont: randomFonts,
+    })
+  }
 
   handleFontDropDown = (blockNumber, event) => {
     let eachBlocksFontUpdate = this.state.eachBlocksFont;
@@ -239,6 +237,7 @@ class App extends React.Component {
           handleTextAreaChange={this.handleTextAreaChange}
           handleFontRangePropertyChange={this.handleFontRangePropertyChange}
           handleFontTogglePropertyChange={this.handleFontTogglePropertyChange}
+          handleRandomizeAllFonts={this.handleRandomizeAllFonts}
           handleFontDropDown={this.handleFontDropDown}
           handleGridAmountChange={this.handleGridAmountChange}
           fontFamilies={this.state.fontFamilies}
@@ -287,7 +286,6 @@ class App extends React.Component {
                     grids={this.state.grids}
                     content={this.state.text} 
                     fontFamilies={this.state.fontFamilies}
-                    handleClick={this.handleDisplayBlockKeepButton}
                     handleHover={this.handleDisplayBlockHover}
                     handleDropDown={this.handleDisplayBlockDropDown}
                     handleInformationButtonClick={this.handleInformationButtonClick}
