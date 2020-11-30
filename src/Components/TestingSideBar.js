@@ -7,11 +7,10 @@ const TestingSideBar = (props) => {
     return (
       <div 
         className="SideBar"
-        style={props.showSideBar ? {"left": "0%"} : {"left": "-350px"}}
+        style={props.showSideBar ? {"left": "0%"} : {"left": "-400px"}}
       >
         <h1 className="SideBar__Title">
-          Typography<br /> 
-          Grid Tester
+          Typogrid
         </h1>
         <textarea 
           className="SideBar__TextArea"
@@ -78,6 +77,7 @@ const TestingSideBar = (props) => {
             props.grids.map((_, index) => {
               return (
                 <FontDropDownControls 
+                  grids={props.grids}
                   blockNumber={index}
                   handleFontDropDown={props.handleFontDropDown}
                   eachBlocksFont={props.eachBlocksFont}

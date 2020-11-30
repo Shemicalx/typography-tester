@@ -22,9 +22,9 @@ class App extends React.Component {
       fontRangeProperties: {
         fontSize: {
           range: {
-            min: 12,
-            max: 20,
-            intervals: 8 / (window.innerWidth > 1300 ? 9 - 1 : 6 - 1),
+            min: 20,
+            max: 36,
+            intervals: 16 / (window.innerWidth > 1300 ? 9 - 1 : 6 - 1),
             step: 1,
           }
         },
@@ -33,7 +33,7 @@ class App extends React.Component {
             min: 1.2,
             max: 1.2,
             intervals: 0,
-            step: 0.1,
+            step: 0.05,
           }
         },
         letterSpacing: {
@@ -49,7 +49,7 @@ class App extends React.Component {
             min: 0,
             max: 0,
             intervals: 0,
-            step: 0.1,
+            step: 0.5,
           }
         },
       },
@@ -82,21 +82,21 @@ class App extends React.Component {
   fetchGoogleFontsFamilies = () => {
     //Very slow load atm. Need to figure out a better way.
     /* */
-    try {
-      fetch(googleFontsApiRequest)
-      .then(response => response.json())
-      .then(data => {
-        const fontFamiliesFetched = data.items.map(datum => datum.family)
-        this.setState({
-          fontFamilies: ["-No Font Selected-",...fontFamiliesFetched]
-        });
-        WebFont.load({
-          google: {
-            families: fontFamiliesFetched
-          }
-        });
+    fetch(googleFontsApiRequest)
+    .then(response => response.json())
+    .then(data => {
+      const fontFamiliesFetched = data.items.map(datum => datum.family)
+      this.setState({
+        fontFamilies: ["-No Font Selected-",...fontFamiliesFetched]
       });
-    } catch (error) {
+      WebFont.load({
+        google: {
+          families: fontFamiliesFetched
+        }
+      });
+      //Not sure if catch works or not
+    }).catch( error => {
+      console.log(error);
       const fontFamiliesFetched = ["-No Font Selected-","ABeeZee", "Abel", "Abhaya Libre", "Abril Fatface", "Aclonica", "Acme", "Actor", "Adamina", "Advent Pro", "Aguafina Script", "Akronim", "Aladin", "Alata", "Alatsi", "Aldrich", "Alef", "Alegreya", "Alegreya SC", "Alegreya Sans", "Alegreya Sans SC", "Aleo", "Alex Brush", "Alfa Slab One", "Alice", "Alike", "Alike Angular", "Allan", "Allerta", "Allerta Stencil", "Allura", "Almarai", "Almendra", "Almendra Display", "Almendra SC", "Amarante", "Amaranth", "Amatic SC", "Amethysta", "Amiko", "Amiri", "Amita", "Anaheim", "Andada", "Andika", "Angkor", "Annie Use Your Telescope", "Anonymous Pro", "Antic", "Antic Didone", "Antic Slab", "Anton", "Arapey", "Arbutus", "Arbutus Slab", "Architects Daughter", "Archivo", "Archivo Black", "Archivo Narrow", "Aref Ruqaa", "Arima Madurai", "Arimo", "Arizonia", "Armata", "Arsenal", "Artifika", "Arvo", "Arya", "Asap", "Asap Condensed", "Asar", "Asset", "Assistant", "Astloch", "Asul", "Athiti", "Atma", "Atomic Age", "Aubrey", "Audiowide", "Autour One", "Average", "Average Sans", "Averia Gruesa Libre", "Averia Libre", "Averia Sans Libre", "Averia Serif Libre", "B612", "B612 Mono", "Bad Script", "Bahiana", "Bahianita", "Bai Jamjuree"];
       this.setState({
         fontFamilies: fontFamiliesFetched
@@ -106,7 +106,9 @@ class App extends React.Component {
           families: fontFamiliesFetched
         }
       });
-    }
+    });
+  
+    
   }
 
   componentDidMount(){
@@ -249,7 +251,7 @@ class App extends React.Component {
         <div 
           className="App__Display"
           style={
-            this.state.showSideBar && window.innerWidth > 1300 ? {"marginLeft": "350px"} : {"marginLeft": "0"}
+            this.state.showSideBar && window.innerWidth > 1300 ? {"marginLeft": "400px"} : {"marginLeft": "0"}
           }
         >
           <section 
