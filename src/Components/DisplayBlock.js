@@ -59,7 +59,7 @@ const DisplayBlock = (props) => {
     return (
     <div 
       className="DisplayBlock" 
-      style={{"maxHeight": `${99.3 / (props.grids.length % 3 ? 2 : 3)}vh`}}
+      style={{"maxHeight": `${100 / (props.grids.length % 3 ? 2 : 3) - 0.1}vh`}}
       onMouseEnter={(e)=>props.handleHover(props.blockNumber, true, e)}
       onMouseLeave={(e)=>props.handleHover(props.blockNumber, false, e)}
     >

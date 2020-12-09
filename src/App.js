@@ -6,7 +6,7 @@ require('dotenv').config({path: './.env'});
 const WebFont = require("webfontloader");
 
 //Need to figure out how to hide the key(.env file gave me some trouble)
-const googleFontsApiRequest = `https://www.googleapis.com/webfonts/v1/webfonts?key=${process.env.REACT_APP_API_KEY}`;
+const googleFontsApiRequest = `https://www.googleapis.com/webfonts/v1/webfonts?key=${process.env.REACT_APP_API_KEY}TESTMODE`;
 
 class App extends React.Component {
   constructor(props){
@@ -74,8 +74,9 @@ class App extends React.Component {
       showBlockMenu: [false,''],
       showInformationSection: [false,''],
       showKeepSection: [false,''],
-      eachBlocksFont: [],
+      showRangeControls: [],
       showSideBar: true,
+      eachBlocksFont: [],
     }
   }
 
@@ -113,9 +114,13 @@ class App extends React.Component {
 
   componentDidMount(){
     this.fetchGoogleFontsFamilies();
+    const fontRangePropertiesWithToggle = {}; 
+    Object.keys(this.state.fontRangeProperties).forEach( property => {
+      fontRangePropertiesWithToggle[property] = false;
+    });
     this.setState({
       eachBlocksFont: this.state.grids.fill("-No Font Selected-"),
-
+      showRangeControls: fontRangePropertiesWithToggle,
     })
   }
 
@@ -133,8 +138,10 @@ class App extends React.Component {
 
   handleFontRangePropertyChange = (propertyToUpdate, minOrMax, event) => {
     //Update min/max range properties based on minOrMax
+    const update = typeof event === "object" ? Number(event.target.value) : event;
+    console.log(update);
     let properties = this.state.fontRangeProperties;
-    properties[propertyToUpdate].range[minOrMax] = Number(event.target.value);
+    properties[propertyToUpdate].range[minOrMax] = update;
     //Calculate new intervals and make sure max and min stay together
     let {min, max, intervals, step} = properties[propertyToUpdate].range;
     intervals = (max - min) / (this.state.grids.length - 1);
@@ -142,6 +149,28 @@ class App extends React.Component {
     this.setState({
       fontRangeProperties: properties,
     });
+  };
+
+  handleFontRangePropertyButtons = (propertyToUpdate, minOrMax, event) => {
+    let update = 0;
+    const {step} = this.state.fontRangeProperties[propertyToUpdate].range;
+    switch(event.target.innerHTML){
+      case "+": 
+        update = this.state.fontRangeProperties[propertyToUpdate].range[minOrMax] + step;
+        break;
+      case "-":
+        update = this.state.fontRangeProperties[propertyToUpdate].range[minOrMax] - step;
+        break;
+      default: 
+        update = 0;
+    }
+    this.handleFontRangePropertyChange(propertyToUpdate, minOrMax, Number(update.toFixed(2)));
+  };
+
+  handleRangePropertyDropDown = (property, event) => {
+    let update = this.state.showRangeControls;
+    update[property] = !this.state.showRangeControls[property];
+    this.setState(update);
   };
 
   handleFontTogglePropertyChange = (propertyToUpdate, propertyObj, event) => {
@@ -238,6 +267,8 @@ class App extends React.Component {
           showSideBar={this.state.showSideBar}
           handleTextAreaChange={this.handleTextAreaChange}
           handleFontRangePropertyChange={this.handleFontRangePropertyChange}
+          handleFontRangePropertyButtons={this.handleFontRangePropertyButtons}
+          handleRangePropertyDropDown={this.handleRangePropertyDropDown}
           handleFontTogglePropertyChange={this.handleFontTogglePropertyChange}
           handleRandomizeAllFonts={this.handleRandomizeAllFonts}
           handleFontDropDown={this.handleFontDropDown}
@@ -246,6 +277,7 @@ class App extends React.Component {
           fontSizeRange={this.state.fontSizeRange}
           fontRangeProperties={this.state.fontRangeProperties}
           fontToggleProperties={this.state.fontToggleProperties}
+          showRangeControls={this.state.showRangeControls}
           eachBlocksFont={this.state.eachBlocksFont}
         />
         <div 

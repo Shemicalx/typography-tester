@@ -1,6 +1,6 @@
 import FontDropDownControls from './ControlsComponents/FontDropDownControls';
 import FontPropertyRangeControls from'./ControlsComponents/FontPropertyRangeControls';
-// import FontPropertyToggleControls from './ControlsComponents/FontPropertyToggleControls';
+import FontPropertyToggleControls from './ControlsComponents/FontPropertyToggleControls';
 
 const TestingSideBar = (props) => {
 
@@ -17,55 +17,61 @@ const TestingSideBar = (props) => {
           placeholder="Write something!"
           onChange={props.handleTextAreaChange} 
         />
-        <div className="SideBar__MinMaxTitles">
-          <span>
-            Min
-          </span>
-          <span>
-            Max
-          </span>
-        </div>
-        {
-          //Iterate through state range properties
-          Object.entries(props.fontRangeProperties).map(([propertyName, propertyObj]) => {
-            return (
-              <FontPropertyRangeControls 
-                property={propertyName} 
-                range={propertyObj.range}
-                fontPropertyChangeHandler={props.handleFontRangePropertyChange}
-              />      
-            )    
-          })
-        }
-        <div className="SideBar__ToggleControls">
-        {
-          //Iterate through state toggle properties
-          // Object.entries(props.fontToggleProperties).map(([propertyName, propertyObj]) => {
-          //   return (
-          //     <FontPropertyToggleControls 
-          //       property={propertyName} 
-          //       propertyObj={propertyObj}
-          //       handleFontTogglePropertyChange={props.handleFontTogglePropertyChange}
-          //     />      
-          //   )    
-          // })
-        }
-        </div>
-        <div className="SideBar__GridAmountControls">
+        <div className="SideBar__FontRangeControls">
+          {/* <div className="SideBar__MinMaxTitles">
+            <span>
+              Min
+            </span>
+            <span>
+              Max
+            </span>
+          </div> */}
           {
-            [2,4,6,9,12].map((grids) => {
+            //Iterate through state range properties
+            Object.entries(props.fontRangeProperties).map(([propertyName, propertyObj]) => {
               return (
-                <button 
-                  className="SideBar__GridAmountButton" 
-                  onClick={props.handleGridAmountChange}
-                  style={props.grids.length === grids ? {"backgroundColor": "var(--color-main-very-light)"} : {}}
-                >
-                  {grids}
-                </button>)
+                <FontPropertyRangeControls 
+                  property={propertyName} 
+                  range={propertyObj.range}
+                  handleFontRangePropertyChange={props.handleFontRangePropertyChange}
+                  handleFontRangePropertyButtons={props.handleFontRangePropertyButtons}
+                  handleRangePropertyDropDown={props.handleRangePropertyDropDown}
+                  showRangeControls={props.showRangeControls}
+                />      
+              )    
             })
           }
         </div>
+        {/* <div className="SideBar__ToggleControls">
+          {
+            //Iterate through state toggle properties
+            Object.entries(props.fontToggleProperties).map(([propertyName, propertyObj]) => {
+              return (
+                <FontPropertyToggleControls 
+                  property={propertyName} 
+                  propertyObj={propertyObj}
+                  handleFontTogglePropertyChange={props.handleFontTogglePropertyChange}
+                />      
+              )    
+            })
+          }
+        </div> */}
         <div className="SideBar__FontFamilyControls">
+          <label className="SideBar__GridsLabel">Grids</label>
+          <div className="SideBar__GridAmountControls">
+            {
+              [2,4,6,9,12].map((grids) => {
+                return (
+                  <button 
+                    className="SideBar__GridAmountButton" 
+                    onClick={props.handleGridAmountChange}
+                    style={props.grids.length === grids ? {"backgroundColor": "var(--color-main-very-light)", "fontSize": "2rem"} : {}}
+                  >
+                    {grids}
+                  </button>)
+              })
+            }
+          </div>
           <div 
             className="SideBar__FontFamiyControls__DropDowns"
             style={{

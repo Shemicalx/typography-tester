@@ -5,7 +5,7 @@ const FontDropDownControls = (props) => {
                 className="SideBar__FontDropDownLabel"
                 style={{
                     "fontFamily": props.eachBlocksFont[props.blockNumber] === "-No Font Selected-" ? "Arial" : props.eachBlocksFont[props.blockNumber],
-                    "fontSize": `${3 - (props.grids.length / 12)}rem`,
+                    "fontSize": `${2.6 - (props.grids.length / 12)}rem`,
                 }}
             >
                 Abc
@@ -16,7 +16,7 @@ const FontDropDownControls = (props) => {
                 value={props.eachBlocksFont[props.blockNumber]}
                 style={{
                     "fontFamily": props.eachBlocksFont[props.blockNumber] === "-No Font Selected-" ? "Arial" : props.eachBlocksFont[props.blockNumber],
-                    "fontSize": `${1.6 - (props.grids.length / 24)}rem`
+                    "fontSize": `${1.4 - (props.grids.length / 24)}rem`
                 }}
             >   
             {
