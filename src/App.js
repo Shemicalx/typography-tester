@@ -17,7 +17,7 @@ class App extends React.Component {
       Nullam placerat a lectus a laoreet. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Morbi consectetur ullamcorper nibh nec faucibus. Sed elementum justo a dolor tristique tristique eu in ligula. Phasellus tempor hendrerit augue id suscipit. Vivamus bibendum vehicula pellentesque. Morbi dignissim enim facilisis dolor blandit, nec molestie turpis eleifend. Suspendisse varius sed ipsum in suscipit. Vivamus accumsan erat ut nisi pellentesque, eu iaculis arcu tristique. Etiam luctus, eros bibendum mattis accumsan, metus tortor sollicitudin tortor, non auctor quam nisi at odio.
       
       Donec ac ipsum dui. Aenean dictum iaculis tortor at aliquam. Donec dolor odio, mattis non congue at, euismod et enim. Integer rhoncus consequat turpis vitae egestas. Sed auctor vehicula quam ut gravida. Duis nisl libero, tempor quis est ut, posuere vestibulum tortor. Phasellus id dapibus elit. Sed pharetra posuere suscipit. Quisque in ipsum non diam tempus laoreet sed sit amet nulla. Praesent ac leo eget diam egestas pellentesque. Mauris feugiat ligula eget sapien bibendum condimentum. Mauris quis nisi enim. Donec feugiat, elit eget efficitur vulputate, sapien massa pretium felis, eget ullamcorper eros sapien nec libero. Quisque vulputate lorem eget erat consectetur eleifend. Aenean odio velit, luctus eleifend maximus ac, mollis a odio. Nam eu est dignissim, maximus sem nec, facilisis dolor.`,
-      grids: window.innerWidth > 1300 ? [...Array(9)] : [...Array(6)],
+      grids: window.innerWidth > 1300 ? [...Array(9)] : [...Array(4)],
       windowMode: 'big',
       fontFamilies: [],
       fontRangeProperties: {
@@ -77,6 +77,7 @@ class App extends React.Component {
       showKeepSection: [false,''],
       showRangeControls: [],
       showSideBar: true,
+      showMinimizedGridAmountSection: false,
       eachBlocksFont: [],
     }
   }
@@ -116,7 +117,7 @@ class App extends React.Component {
   componentDidMount(){
     const fontRangePropertiesWithToggle = {}; 
     Object.keys(this.state.fontRangeProperties).forEach( property => {
-      fontRangePropertiesWithToggle[property] = false;
+      fontRangePropertiesWithToggle[property] = property === "fontSize" ? true : false ;
     });
 
     this.fetchGoogleFontsFamilies();
@@ -213,6 +214,13 @@ class App extends React.Component {
     this.setState(fontRangePropertiesUpdate);
   };
 
+  handleMinimizedGridAmountSection = (event) => {
+    console.log(this.state.showMinimizedGridAmountSection);
+    this.setState({
+      showMinimizedGridAmountSection: !this.state.showMinimizedGridAmountSection
+    })
+  };
+
   handleRandomizeAllFonts = (event) => {
     let randomFonts = [...Array(this.state.grids.length)];
     randomFonts.forEach((_, index, randomFontsArray) => {
@@ -289,17 +297,19 @@ class App extends React.Component {
           handleRandomizeAllFonts={this.handleRandomizeAllFonts}
           handleFontDropDown={this.handleFontDropDown}
           handleGridAmountChange={this.handleGridAmountChange}
+          handleMinimizedGridAmountSection={this.handleMinimizedGridAmountSection}
           fontFamilies={this.state.fontFamilies}
           fontSizeRange={this.state.fontSizeRange}
           fontRangeProperties={this.state.fontRangeProperties}
           fontToggleProperties={this.state.fontToggleProperties}
           showRangeControls={this.state.showRangeControls}
+          showMinimizedGridAmountSection={this.state.showMinimizedGridAmountSection}
           eachBlocksFont={this.state.eachBlocksFont}
         />
         <div 
           className="App__Display"
           style={
-            this.state.showSideBar && window.innerWidth > 1300 ? {"marginLeft": "400px"} : {"marginLeft": "0"}
+            this.state.showSideBar && window.innerWidth > 1300 ? {"marginLeft": "400px"} : {"marginLeft": "5.6rem"}
           }
         >
           <section 

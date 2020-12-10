@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRandom, faThLarge } from '@fortawesome/free-solid-svg-icons'
 import FontDropDownControls from './ControlsComponents/FontDropDownControls';
 import FontPropertyRangeControls from'./ControlsComponents/FontPropertyRangeControls';
 import FontPropertyToggleControls from './ControlsComponents/FontPropertyToggleControls';
@@ -5,21 +7,36 @@ import FontPropertyToggleControls from './ControlsComponents/FontPropertyToggleC
 const TestingSideBar = (props) => {
 
     const gridModes = window.innerWidth < 750 ? [2,4,6] : [2,4,6,9,12];
+    const hidden = {
+      "opacity": "0",
+      "pointerEvents": "none"
+    };
+    const visible = {
+      "opacity": "1",
+      "pointerEvents": "all"
+    }
 
     return (
       <div 
         className="SideBar"
-        style={props.showSideBar ? {"left": "0%"} : {"left": "-650px"}}
+        style={props.showSideBar ? {} : {"width": "5.6rem", "overflow": "hidden"}}
       >
-        <h1 className="SideBar__Title">
+        <h1 
+          className="SideBar__Title"
+          style={props.showSideBar ? visible : hidden}
+        >
           Typogrid
         </h1>
         <textarea 
           className="SideBar__TextArea"
           placeholder="Write something!"
+          style={props.showSideBar ? visible : hidden}
           onChange={props.handleTextAreaChange} 
         />
-        <div className="SideBar__FontRangeControls">
+        <div 
+          className="SideBar__FontRangeControls"
+          style={props.showSideBar ? visible : hidden}
+        >
           {/* <div className="SideBar__MinMaxTitles">
             <span>
               Min
@@ -58,8 +75,13 @@ const TestingSideBar = (props) => {
             })
           }
         </div> */}
-        <div className="SideBar__FontFamilyControls">
-          <label className="SideBar__GridsLabel">Grids</label>
+        <div 
+          className="SideBar__FontFamilyControls"
+          style={props.showSideBar ? visible : hidden}
+        >
+          <label className="SideBar__GridsLabel">
+            Grids
+          </label>
           <div className="SideBar__GridAmountControls">
             {
               gridModes.map((grids) => {
@@ -100,6 +122,41 @@ const TestingSideBar = (props) => {
             onClick={props.handleRandomizeAllFonts}
           >
             Randomize All Fonts
+          </button>
+        </div>
+
+        <div 
+          className="SideBar__MinimizedBar"
+          style={props.showSideBar ? {...hidden, "left": "450px",} : visible}
+        >
+          <button 
+            className="SideBar__MinimizedBar__Button"
+            onClick={props.handleMinimizedGridAmountSection}
+          >
+            <FontAwesomeIcon icon={faThLarge} />
+          </button>
+          <div 
+            className="SideBar__MinimizedBar__GridAmountControls"
+            style={props.showMinimizedGridAmountSection ? {"height": `${2.8 * gridModes.length}rem`} : {"height": "0"}}
+          >
+            {
+              gridModes.map((grids) => {
+                return (
+                  <button 
+                    className="SideBar__MinimizedBar__GridAmountButton" 
+                    onClick={props.handleGridAmountChange}
+                    style={props.grids.length === grids ? {"backgroundColor": "var(--color-main-very-light)", "fontSize": "2rem", "height": "3rem"} : {}}
+                  >
+                    {grids}
+                  </button>)
+              })
+            }
+          </div>
+          <button 
+            className="SideBar__MinimizedBar__Button"
+            onClick={props.handleRandomizeAllFonts}
+          >
+            <FontAwesomeIcon icon={faRandom} />
           </button>
         </div>
       </div>

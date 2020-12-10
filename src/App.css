@@ -35,14 +35,13 @@ input[type=number]::-webkit-inner-spin-button {
 body{
   background-color: var(--color-main-light);
   margin: 0;
-  font-family: Abel;
+  font-family: "Times New Roman";
   color: var(--color-white-normal);
 }
 
 h1, h2, h3, h4, h5, h6, p, li, button {
   margin: 0;
   padding: 0;
-  font-family: Abel;
 }
 
 ul {
@@ -61,7 +60,7 @@ ul {
   width: 100%;
   flex-direction: column;
   align-items: center;
-  transition: margin 0.5s 0.1s;
+  transition: margin 0.6s;
   overflow: hidden;
 }
 
@@ -120,6 +119,7 @@ ul {
   width: 50%;
   color: var(--color-white-normal);
   font-size: 1.4rem;
+  font-family: Abel;
   background-color: var(--color-main);
   opacity: 0.9;
   border: none;
@@ -151,6 +151,7 @@ ul {
   width: 50%;
   color: white;
   font-size: 1.4rem;
+  font-family: Abel;
   background-color: var(--color-main);
   opacity: 0.9;
   border: none;
@@ -190,6 +191,7 @@ ul {
   height: 0%;
   width: 50%;
   color: white;
+  font-family: Abel;
   font-size: 1rem;
   background-color: var(--color-main);
   opacity: 0.9;
@@ -228,6 +230,7 @@ ul {
 }
 
 .DisplayBlock__KeepSection > button {
+  font-family: Abel;
   color: var(--color-white-normal);
   font-size: 1.2rem;
   background-color: var(--color-main);
@@ -246,10 +249,6 @@ ul {
   background-color: var(--color-main-very-light);
   font-size: 1.3rem;
   color: white;
-}
-
-.DisplayBlock__CopyCSSButton{
-  height: 50%;
 }
 
 .App__SideBarToggle{
@@ -322,18 +321,22 @@ ul {
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 1;
-  opacity: 0.96;
   background-color: var(--color-main);
-  transition: left 0.6s;
+  transition: 
+    width 0.6s,
+    left 0.6s;
 }
 
 .SideBar__Title {
+  font-family: Abel;
   font-size: 2.6rem;
   text-align: center;
   margin: 1rem 4rem;
+  transition: opacity 0.4s;
 }
 
 .SideBar__TextArea {
+  font-family: Abel;
   background-color: var(--color-main-very-light);
   color: var(--color-white-normal);
   height: 100%;
@@ -343,6 +346,7 @@ ul {
   resize: none;
   border: none;
   outline: none;
+  transition: opacity 0.4s;
 }
 
 textarea::-webkit-input-placeholder {
@@ -357,6 +361,7 @@ textarea::-webkit-input-placeholder {
   align-items: center;
   height: 100%;
   width: 100%;
+  transition: opacity 0.4s;
 }
 
 .SideBar__Inputs {
@@ -382,6 +387,7 @@ textarea::-webkit-input-placeholder {
 }
 
 .SideBar__InputsLabel {
+  font-family: Abel;
   background-color: var(--color-main);
   font-size: 1.4rem;
   padding: 0.4rem;
@@ -430,6 +436,7 @@ textarea::-webkit-input-placeholder {
 }
 
 .SideBar__InputAndControls > input{
+  font-family: Abel;
   font-size: 1.4rem;
   width: 100%;
   height: 100%;
@@ -446,6 +453,7 @@ textarea::-webkit-input-placeholder {
 }
 
 .SideBar__InputAndControls > button {
+  font-family: Abel;
   font-size: 1.4rem;
   background-color: var(--color-main-light);
   color: var(--color-white-dark);
@@ -488,6 +496,7 @@ textarea::-webkit-input-placeholder {
 }
 
 .SideBar__GridsLabel {
+  font-family: Abel;
   text-align: center;
   font-size: 2rem;
   padding: 0.4rem 0;
@@ -501,10 +510,21 @@ textarea::-webkit-input-placeholder {
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 4rem;
+}
+
+.SideBar__MinimizedBar__GridAmountControls {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+  transition: 
+    height 0.8s;
 }
 
 .SideBar__GridAmountButton {
+  font-family: Abel;
   background-color: var(--color-main-light);
   color: var(--color-white-normal);
   font-size: 1.4rem;
@@ -518,6 +538,22 @@ textarea::-webkit-input-placeholder {
     font-size 0.5s;
 }
 
+.SideBar__MinimizedBar__GridAmountButton {
+  font-family: Abel;
+  background-color: var(--color-main-light);
+  color: var(--color-white-normal);
+  font-size: 1.4rem;
+  border: none;
+  outline: none;
+  height: 2.8rem;
+  width: 100%;
+  margin: 0.1rem 0;
+  transition: 
+    background-color 0.5s,
+    font-size 0.5s,
+    height 0.5s;
+}
+
 .SideBar__GridAmountButton:hover {
   background-color: var(--color-main-very-light);
 }
@@ -528,9 +564,11 @@ textarea::-webkit-input-placeholder {
   flex-direction: column;
   align-items: center;
   border-top: 0.2rem solid var(--color-main-very-light);
+  transition: opacity 0.4s;
 }
 
 .SideBar__FontFamilyControls__RandomAll {
+  font-family: Abel;
   width: 100%;
   font-size: 1.2rem;
   padding: 0.8rem;
@@ -583,6 +621,36 @@ textarea::-webkit-input-placeholder {
 .SideBar__FontDropDown:hover {
   background-color: var(--color-main-light);
   font-size: 1.2rem;
+}
+
+.SideBar__MinimizedBar {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  bottom: 0;
+  left: 0;
+  width: 5.6rem;
+  height: 100%;
+  transition: 
+    opacity 0.6s,
+    width 0.6s 0.6s,
+    left 0.7s;
+}
+
+.SideBar__MinimizedBar__Button {
+  height: 5.6rem;
+  font-size: 1.8rem;
+  background-color: var(--color-main);
+  color: var(--color-white-normal);
+  border: none;
+  outline: none;
+  transition: all 0.6s;
+}
+
+.SideBar__MinimizedBar__Button:hover {
+  font-size: 2.2rem;
+  background-color: var(--color-main-dark);
 }
 
 @media only screen and (max-width: 750px) {
