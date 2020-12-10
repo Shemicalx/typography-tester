@@ -18,6 +18,7 @@ class App extends React.Component {
       
       Donec ac ipsum dui. Aenean dictum iaculis tortor at aliquam. Donec dolor odio, mattis non congue at, euismod et enim. Integer rhoncus consequat turpis vitae egestas. Sed auctor vehicula quam ut gravida. Duis nisl libero, tempor quis est ut, posuere vestibulum tortor. Phasellus id dapibus elit. Sed pharetra posuere suscipit. Quisque in ipsum non diam tempus laoreet sed sit amet nulla. Praesent ac leo eget diam egestas pellentesque. Mauris feugiat ligula eget sapien bibendum condimentum. Mauris quis nisi enim. Donec feugiat, elit eget efficitur vulputate, sapien massa pretium felis, eget ullamcorper eros sapien nec libero. Quisque vulputate lorem eget erat consectetur eleifend. Aenean odio velit, luctus eleifend maximus ac, mollis a odio. Nam eu est dignissim, maximus sem nec, facilisis dolor.`,
       grids: window.innerWidth > 1300 ? [...Array(9)] : [...Array(6)],
+      windowMode: 'big',
       fontFamilies: [],
       fontRangeProperties: {
         fontSize: {
@@ -113,14 +114,29 @@ class App extends React.Component {
   }
 
   componentDidMount(){
-    this.fetchGoogleFontsFamilies();
     const fontRangePropertiesWithToggle = {}; 
     Object.keys(this.state.fontRangeProperties).forEach( property => {
       fontRangePropertiesWithToggle[property] = false;
     });
+
+    this.fetchGoogleFontsFamilies();
+    
     this.setState({
       eachBlocksFont: this.state.grids.fill("-No Font Selected-"),
       showRangeControls: fontRangePropertiesWithToggle,
+    })
+
+    window.addEventListener('resize', this.handleWindowResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleWindowResize);
+  }
+
+  handleWindowResize = () => {
+    const windowMode = window.innerWidth < 750 ? 'small' : window.innerWidth < 1300 ? 'medium' : 'big';
+    this.setState({
+      windowMode: windowMode
     })
   }
 

@@ -4,10 +4,12 @@ import FontPropertyToggleControls from './ControlsComponents/FontPropertyToggleC
 
 const TestingSideBar = (props) => {
 
+    const gridModes = window.innerWidth < 750 ? [2,4,6] : [2,4,6,9,12];
+
     return (
       <div 
         className="SideBar"
-        style={props.showSideBar ? {"left": "0%"} : {"left": "-400px"}}
+        style={props.showSideBar ? {"left": "0%"} : {"left": "-650px"}}
       >
         <h1 className="SideBar__Title">
           Typogrid
@@ -60,7 +62,7 @@ const TestingSideBar = (props) => {
           <label className="SideBar__GridsLabel">Grids</label>
           <div className="SideBar__GridAmountControls">
             {
-              [2,4,6,9,12].map((grids) => {
+              gridModes.map((grids) => {
                 return (
                   <button 
                     className="SideBar__GridAmountButton" 

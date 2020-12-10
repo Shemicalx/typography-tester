@@ -74,7 +74,7 @@ const DisplayBlock = (props) => {
           style={sectionToShow("DisplayBlock__InfoButton")}
           onClick={(e)=>props.handleInformationButtonClick(props.blockNumber, !props.showInformationSection[0], e)}
         >
-          Information
+          Info
         </button> 
         <div 
           className={`DisplayBlock__InfoSection ${showInformationSection() ? "DisplayBlock__InfoSection__Show" : ""}`}
