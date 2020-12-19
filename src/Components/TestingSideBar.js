@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRandom, faThLarge } from '@fortawesome/free-solid-svg-icons'
+import { faRandom, faThLarge } from '@fortawesome/free-solid-svg-icons';
 import FontDropDownControls from './ControlsComponents/FontDropDownControls';
 import FontPropertyRangeControls from'./ControlsComponents/FontPropertyRangeControls';
 import FontPropertyToggleControls from './ControlsComponents/FontPropertyToggleControls';
@@ -110,8 +110,10 @@ const TestingSideBar = (props) => {
                   grids={props.grids}
                   blockNumber={index}
                   handleFontDropDown={props.handleFontDropDown}
+                  handleFontDropDownGridHover={props.handleFontDropDownGridHover}
                   eachBlocksFont={props.eachBlocksFont}
                   fontFamilies={props.fontFamilies}
+                  hoveredBlock={props.hoveredBlock}
                 />
               )
             })

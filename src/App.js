@@ -17,7 +17,7 @@ class App extends React.Component {
       Nullam placerat a lectus a laoreet. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Morbi consectetur ullamcorper nibh nec faucibus. Sed elementum justo a dolor tristique tristique eu in ligula. Phasellus tempor hendrerit augue id suscipit. Vivamus bibendum vehicula pellentesque. Morbi dignissim enim facilisis dolor blandit, nec molestie turpis eleifend. Suspendisse varius sed ipsum in suscipit. Vivamus accumsan erat ut nisi pellentesque, eu iaculis arcu tristique. Etiam luctus, eros bibendum mattis accumsan, metus tortor sollicitudin tortor, non auctor quam nisi at odio.
       
       Donec ac ipsum dui. Aenean dictum iaculis tortor at aliquam. Donec dolor odio, mattis non congue at, euismod et enim. Integer rhoncus consequat turpis vitae egestas. Sed auctor vehicula quam ut gravida. Duis nisl libero, tempor quis est ut, posuere vestibulum tortor. Phasellus id dapibus elit. Sed pharetra posuere suscipit. Quisque in ipsum non diam tempus laoreet sed sit amet nulla. Praesent ac leo eget diam egestas pellentesque. Mauris feugiat ligula eget sapien bibendum condimentum. Mauris quis nisi enim. Donec feugiat, elit eget efficitur vulputate, sapien massa pretium felis, eget ullamcorper eros sapien nec libero. Quisque vulputate lorem eget erat consectetur eleifend. Aenean odio velit, luctus eleifend maximus ac, mollis a odio. Nam eu est dignissim, maximus sem nec, facilisis dolor.`,
-      grids: window.innerWidth > 1300 ? [...Array(9)] : [...Array(4)],
+      grids: window.innerWidth > 1300 ? [...Array(9)].fill({locked: false}) : [...Array(4)].fill({locked: false}),
       windowMode: 'big',
       fontFamilies: [],
       fontRangeProperties: {
@@ -78,6 +78,7 @@ class App extends React.Component {
       showRangeControls: [],
       showSideBar: true,
       showMinimizedGridAmountSection: false,
+      hoveredBlock: 999,
       eachBlocksFont: [],
     }
   }
@@ -123,7 +124,8 @@ class App extends React.Component {
     this.fetchGoogleFontsFamilies();
     
     this.setState({
-      eachBlocksFont: this.state.grids.fill("-No Font Selected-"),
+      grids: this.state.grids.fill({locked: false,}),
+      eachBlocksFont: [...Array(this.state.grids.length)].fill("-No Font Selected-"),
       showRangeControls: fontRangePropertiesWithToggle,
     })
 
@@ -156,7 +158,6 @@ class App extends React.Component {
   handleFontRangePropertyChange = (propertyToUpdate, minOrMax, event) => {
     //Update min/max range properties based on minOrMax
     const update = typeof event === "object" ? Number(event.target.value) : event;
-    console.log(update);
     let properties = this.state.fontRangeProperties;
     properties[propertyToUpdate].range[minOrMax] = update;
     //Calculate new intervals and make sure max and min stay together
@@ -215,26 +216,27 @@ class App extends React.Component {
   };
 
   handleMinimizedGridAmountSection = (event) => {
-    console.log(this.state.showMinimizedGridAmountSection);
     this.setState({
       showMinimizedGridAmountSection: !this.state.showMinimizedGridAmountSection
     })
   };
 
   handleRandomizeAllFonts = (event) => {
-    let randomFonts = [...Array(this.state.grids.length)];
-    randomFonts.forEach((_, index, randomFontsArray) => {
-      for(let i = 0; i < this.state.fontFamilies.length; i++){
-        const font = this.state.fontFamilies[Math.floor(Math.random() * this.state.fontFamilies.length)];
-        if(!randomFontsArray.includes(font)){
-          randomFonts[index] = font;
+    let randomFonts = this.state.eachBlocksFont;
+    randomFonts.forEach((font, index, randomFontsArray) => {
+      if(this.state.grids[index].locked === false){
+        for(let i = 0; i < this.state.fontFamilies.length; i++){
+          const font = this.state.fontFamilies[Math.floor(Math.random() * this.state.fontFamilies.length)];
+          if(!randomFontsArray.includes(font)){
+            randomFonts[index] = font;
+          }
         }
       }
     });
     this.setState({
       eachBlocksFont: randomFonts,
     })
-  }
+  };
 
   handleFontDropDown = (blockNumber, event) => {
     let eachBlocksFontUpdate = this.state.eachBlocksFont;
@@ -242,7 +244,13 @@ class App extends React.Component {
     this.setState({
       eachBlocksFont: eachBlocksFontUpdate 
     });
-  }
+  };
+
+  handleFontDropDownGridHover = (blockNumber, event) => {
+    this.setState({
+      hoveredBlock: blockNumber,
+    })
+  };
 
   handleDisplayBlockHover = (blockNumber, show, event) => {
     this.setState({
@@ -266,16 +274,31 @@ class App extends React.Component {
     });
   }
   
-  //Unfinished
-  handleCopyCSSButtonClick = (styles, event) => {
-    console.log(JSON.stringify(styles));
-    JSON.stringify(styles);
+  //need to fix
+  handleLockButtonClick = (blockNumber, event) => {
+    let gridsUpdate = this.state.grids;
+    gridsUpdate[blockNumber] = {locked: !this.state.grids[blockNumber].locked};
+    this.setState({
+      grids: gridsUpdate,
+    });
   }
 
   handleGridAmountChange = (event) => {
+    const newGridAmount = Number(event.target.innerHTML);
+    const newGridsArray = this.state.grids;
+    const newFontsArray = this.state.eachBlocksFont;
+    while(newGridsArray.length > newGridAmount) {
+      newGridsArray.pop();
+      newFontsArray.pop();
+    };
+    while(newGridsArray.length < newGridAmount) {
+      newGridsArray.push({locked: false});
+      newFontsArray.push("-No Font Selected-");
+    }
     this.setState({
-      grids: [...Array(Number(event.target.innerHTML))],
-    })
+      grids: newGridsArray,
+      eachBlocksFont: newFontsArray,
+    });
   }
 
   render() {
@@ -298,12 +321,14 @@ class App extends React.Component {
           handleFontDropDown={this.handleFontDropDown}
           handleGridAmountChange={this.handleGridAmountChange}
           handleMinimizedGridAmountSection={this.handleMinimizedGridAmountSection}
+          handleFontDropDownGridHover={this.handleFontDropDownGridHover}
           fontFamilies={this.state.fontFamilies}
           fontSizeRange={this.state.fontSizeRange}
           fontRangeProperties={this.state.fontRangeProperties}
           fontToggleProperties={this.state.fontToggleProperties}
           showRangeControls={this.state.showRangeControls}
           showMinimizedGridAmountSection={this.state.showMinimizedGridAmountSection}
+          hoveredBlock={this.state.hoveredBlock}
           eachBlocksFont={this.state.eachBlocksFont}
         />
         <div 
@@ -351,13 +376,14 @@ class App extends React.Component {
                     handleInformationButtonClick={this.handleInformationButtonClick}
                     handleKeepButtonClick={this.handleKeepButtonClick}
                     handleKeepMenuButtonClick={this.handleKeepMenuButtonClick}
-                    handleCopyCSSButtonClick={this.handleCopyCSSButtonClick}
+                    handleLockButtonClick={this.handleLockButtonClick}
                     styleRangeProperties={styleRangeProperties}
                     styleToggleProperties={styleToggleProperties}
                     showBlockMenu={this.state.showBlockMenu}
                     showInformationSection={this.state.showInformationSection}
                     showKeepSection={this.state.showKeepSection}
                     eachBlocksFont={this.state.eachBlocksFont}
+                    hoveredBlock={this.state.hoveredBlock}
                   />
                 )
               })

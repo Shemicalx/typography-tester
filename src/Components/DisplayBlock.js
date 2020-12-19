@@ -1,3 +1,6 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLock, faUnlock, faInfoCircle, faGlobe } from '@fortawesome/free-solid-svg-icons';
+
 const DisplayBlock = (props) => {
 
     let textStyle = {
@@ -22,7 +25,7 @@ const DisplayBlock = (props) => {
             return {};
           case "DisplayBlock__InfoSection__FontFamily":
             return {"opacity": "1", "fontFamily": props.eachBlocksFont[props.blockNumber]};
-          case "DisplayBlock__CopyCSSButton":
+          case "DisplayBlock__LockButton":
             return {"width": "100%", "height": "0%", "border": "none"};
           case "DisplayBlock__KeepButton":
             return {"width": "100%", "height": "0%", "border": "none"};
@@ -37,7 +40,7 @@ const DisplayBlock = (props) => {
             return {"width": "100%", "height": "0%", "border": "none"};
           case "DisplayBlock__KeepSection":
             return {"width": "100%", "height": "100%", "border": "none"};
-          case "DisplayBlock__CopyCSSButton":
+          case "DisplayBlock__LockButton":
             return {"width": "100%", "height": "0%", "border": "none"};
           case "DisplayBlock__KeepButton":
             return {"width": "100%", "height": "20%", "fontSize": "1.2rem", "border": "none"};
@@ -46,20 +49,43 @@ const DisplayBlock = (props) => {
         };
       }
       return {};
-    }
+    };
 
     const showInformationSection = () => {
       return props.showInformationSection[0] && props.blockNumber === props.showInformationSection[1];
-    }
+    };
     
     const showKeepSection = () => {
       return props.showKeepSection[0] && props.blockNumber === props.showKeepSection[1];
-    }
+    };
+
+    const hoveredBlockCheckAndStyles = () => {
+      let styles = {
+        focused: {},
+        blurred: {},
+      };
+      if(props.hoveredBlock !== 999){
+        styles.blurred = {
+          "backgroundColor": "var(--color-white-dark)",
+          "color": "var(--color-grey-dark)",
+          "borderColor": "var(--color-main-dark)"
+        }
+        styles.focused = {
+          "backgroundColor": "#fff",
+          "zIndex": "1",
+          "borderColor": "var(--color-main-very-light)"
+        }
+      }
+      return props.blockNumber === props.hoveredBlock ? styles.focused : styles.blurred;
+    };
 
     return (
     <div 
       className="DisplayBlock" 
-      style={{"maxHeight": `${100 / (props.grids.length % 3 ? 2 : 3) - 0.1}vh`}}
+      style={{
+        "maxHeight": `${100 / (props.grids.length % 3 ? 2 : 3) - 0.2}vh`,
+        ...hoveredBlockCheckAndStyles("focused"),
+      }}
       onMouseEnter={(e)=>props.handleHover(props.blockNumber, true, e)}
       onMouseLeave={(e)=>props.handleHover(props.blockNumber, false, e)}
     >
@@ -74,7 +100,7 @@ const DisplayBlock = (props) => {
           style={sectionToShow("DisplayBlock__InfoButton")}
           onClick={(e)=>props.handleInformationButtonClick(props.blockNumber, !props.showInformationSection[0], e)}
         >
-          Info
+          <FontAwesomeIcon icon={faInfoCircle} /> Info
         </button> 
         <div 
           className={`DisplayBlock__InfoSection ${showInformationSection() ? "DisplayBlock__InfoSection__Show" : ""}`}
@@ -109,7 +135,7 @@ const DisplayBlock = (props) => {
             props.handleKeepButtonClick(props.blockNumber, !props.showKeepSection[0], e);
           }}
         >
-          Keep
+          <FontAwesomeIcon icon={faGlobe}/> Keep
         </button>
         <div className={`DisplayBlock__KeepSection ${showKeepSection() ? "DisplayBlock__KeepSection__Show" : ""}`}>
           <p 
@@ -118,46 +144,51 @@ const DisplayBlock = (props) => {
           >
             Click on a property to apply it to all grids
           </p>
-        {
-          Object.entries({
-            ...props.styleRangeProperties, 
-            fontFamily: props.eachBlocksFont[props.blockNumber],
-          }).map(([key, value]) => {
-            return (
-              <button 
-                style={showKeepSection() ? {"opacity": "1"}: {}}
-                onClick={(e)=>props.handleKeepMenuButtonClick({
-                  [key]: value,
-                }, e)}
-              >
-                {`${splitAndCapitalize(key)}`}
-              </button>
-            )
-          })
-        }
-        <button 
-          style={showKeepSection() ? {"opacity": "1"}: {}}
-          onClick={(e)=>props.handleKeepMenuButtonClick({
-            ...props.styleRangeProperties,
+          {
+            Object.entries({
+              ...props.styleRangeProperties, 
               fontFamily: props.eachBlocksFont[props.blockNumber],
-          }, e)}
-        >
-          {`Keep All Styles`}
-        </button>
+            }).map(([key, value]) => {
+              return (
+                <button 
+                  style={showKeepSection() ? {"opacity": "1"}: {}}
+                  onClick={(e)=>props.handleKeepMenuButtonClick({
+                    [key]: value,
+                  }, e)}
+                >
+                  {`${splitAndCapitalize(key)}`}
+                </button>
+              )
+            })
+          }
+          <button 
+            style={showKeepSection() ? {"opacity": "1"}: {}}
+            onClick={(e)=>props.handleKeepMenuButtonClick({
+              ...props.styleRangeProperties,
+                fontFamily: props.eachBlocksFont[props.blockNumber],
+            }, e)}
+          >
+            {`Keep All Styles`}
+          </button>
         </div>
-        {/* <button
-          className="DisplayBlock__Button DisplayBlock__CopyCSSButton"
-          style={sectionToShow("DisplayBlock__CopyCSSButton")}
-          onClick={(e)=>props.handleCopyCSSButtonClick(textStyle, e)}
+        <button
+          className="DisplayBlock__Button DisplayBlock__LockButton"
+          style={sectionToShow("DisplayBlock__LockButton")}
+          onClick={(e)=>props.handleLockButtonClick(props.blockNumber, e)}
         >
-          Copy CSS
-        </button> */}
+          <FontAwesomeIcon icon={props.grids[props.blockNumber].locked ? faLock : faUnlock} />
+        </button>
       </div>
       <p
         style={textStyle}
       >
         {props.content}
       </p>
+      <FontAwesomeIcon 
+        className="DisplayBlock__Locked" 
+        style={{"opacity": `${props.grids[props.blockNumber].locked === true ? 0.6 : 0}`}}
+        icon={ faLock }
+      />
     </div>
     )
   }

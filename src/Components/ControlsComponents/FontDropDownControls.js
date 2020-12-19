@@ -1,6 +1,15 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faLock, faUnlock } from '@fortawesome/free-solid-svg-icons';
+
+
 const FontDropDownControls = (props) => {
     return(
-        <div className="SideBar__FontDropDownGrid">
+        <div 
+            className="SideBar__FontDropDownGrid"
+            onMouseEnter={(e)=>props.handleFontDropDownGridHover(props.blockNumber, e)}
+            onMouseLeave={(e)=>props.handleFontDropDownGridHover(999, e)}
+            style={props.blockNumber === props.hoveredBlock ? {"backgroundColor": "var(--color-main-light)"} : {}}
+        >
             <label
                 className="SideBar__FontDropDownLabel"
                 style={{
@@ -32,6 +41,11 @@ const FontDropDownControls = (props) => {
                 })
             }
             </select>
+            <FontAwesomeIcon 
+                className="SideBar__FontDropDownGrid__Locked" 
+                style={{"opacity": `${props.grids[props.blockNumber].locked === true ? 0.6 : 0}`}}
+                icon={ faLock }
+            />
         </div>
     )
 }
