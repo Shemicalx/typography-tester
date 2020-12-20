@@ -177,16 +177,24 @@ const DisplayBlock = (props) => {
           onClick={(e)=>props.handleLockButtonClick(props.blockNumber, e)}
         >
           <FontAwesomeIcon icon={props.grids[props.blockNumber].locked ? faLock : faUnlock} />
+          {props.grids[props.blockNumber].locked ? " Unlock " : " Lock "}Font
         </button>
       </div>
       <p
-        style={textStyle}
+        style={{
+          ...textStyle,
+        }}
       >
         {props.content}
       </p>
       <FontAwesomeIcon 
         className="DisplayBlock__Locked" 
-        style={{"opacity": `${props.grids[props.blockNumber].locked === true ? 0.6 : 0}`}}
+        style={{
+          "opacity": `${props.grids[props.blockNumber].locked ? "1" : "0"}`,
+          "animation": `${props.grids[props.blockNumber].locked ? "1.6s lockInAnim" : ""}`,
+          "animationFillMode": `${props.grids[props.blockNumber].locked ? "forwards" : "none"}`
+
+        }}
         icon={ faLock }
       />
     </div>
