@@ -6,7 +6,7 @@ require('dotenv').config({path: './.env'});
 const WebFont = require("webfontloader");
 
 //Need to figure out how to hide the key(.env file gave me some trouble)
-const googleFontsApiRequest = `https://www.googleapis.com/webfonts/v1/webfonts?key=${process.env.REACT_APP_API_KEY}TESTMODE`;
+const googleFontsApiRequest = `https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyAgP9ZKkGmBu8yKCIRZXbyMKd1GNOibyWk`;
 
 class App extends React.Component {
   constructor(props){
@@ -89,15 +89,16 @@ class App extends React.Component {
     fetch(googleFontsApiRequest)
     .then(response => response.json())
     .then(data => {
-      const fontFamiliesFetched = data.items.map(datum => datum.family)
+      const fontFamiliesFetched = data.items.map(datum => datum.family);
       this.setState({
         fontFamilies: ["-No Font Selected-",...fontFamiliesFetched]
       });
       WebFont.load({
         google: {
-          families: fontFamiliesFetched
+          families: ['Abel']
         }
       });
+
       //Not sure if catch works or not
     }).catch( error => {
       console.log(error);
@@ -208,7 +209,7 @@ class App extends React.Component {
         fontRangePropertiesUpdate[propertyToUpdate].range.intervals = 0;
       } else {
         this.setState({
-          eachBlocksFont: this.state.grids.fill(styleProperties.fontFamily)
+          eachBlocksFont: this.state.eachBlocksFont.fill(styleProperties.fontFamily)
         });
       }
     });
@@ -233,6 +234,11 @@ class App extends React.Component {
         }
       }
     });
+    WebFont.load({
+      google: {
+        families: randomFonts,
+      }
+    });
     this.setState({
       eachBlocksFont: randomFonts,
     })
@@ -241,9 +247,15 @@ class App extends React.Component {
   handleFontDropDown = (blockNumber, event) => {
     let eachBlocksFontUpdate = this.state.eachBlocksFont;
     eachBlocksFontUpdate[blockNumber] = event.target.value;
+    WebFont.load({
+      google: {
+        families: [event.target.value,],
+      }
+    });
     this.setState({
       eachBlocksFont: eachBlocksFontUpdate 
     });
+    console.log(event.target.value);
   };
 
   handleFontDropDownGridHover = (blockNumber, event) => {

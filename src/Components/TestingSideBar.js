@@ -2,7 +2,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRandom, faThLarge } from '@fortawesome/free-solid-svg-icons';
 import FontDropDownControls from './ControlsComponents/FontDropDownControls';
 import FontPropertyRangeControls from'./ControlsComponents/FontPropertyRangeControls';
-import FontPropertyToggleControls from './ControlsComponents/FontPropertyToggleControls';
 
 const TestingSideBar = (props) => {
 

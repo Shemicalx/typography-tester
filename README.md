@@ -1,70 +1,69 @@
-# Getting Started with Create React App
+# Typogrid
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Typogrid is a webapp created with the intention of making font selecting and styling simpler for creators of any kind.\
+`Skip the first two sections to see one of a few recommended workflows.`
 
-## Available Scripts
+## Sidebar
 
-In the project directory, you can run:
+On the sidebar one shall find most of the availible tools.
 
-### `npm start`
+### `Text Field`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Type or simply copy and paste a word/title/paragraph into the 'Write something!' empty field to make the testing grid repeat your text. 
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### `Range Properties`
 
-### `npm test`
+Click on one of the titles just below the text field to expand a `range property`. There you should find two numbers - the minimum value to the left, and maximum value to the right.\
+Once these numbers are changed, the grid will apply the change to all current grids, spreading the difference evenly. Heres an example -
+> Lets say we have `4` grids. If we set the font size `minimum value to 12` and the `maximum value to 24`, the grids would look like so -
+> * First Grid - 12px
+> * Second Grid - 16px
+> * Third Grid - 20px
+> * Fourth Grid - 24px
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### `Different Grids`
 
-### `npm run build`
+Just below the `'Grids'` title, click on any of the numbers to change the amount of displays. 
+> Click on `4` to have a `2 by 2` grid, on `9` to have a `3 by 3` grid and so on.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### `Font Picking and Randomization`
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The grid of `'ABC'`s at the bottom of the sidebar represents the main grid. Meaning the the block at the top left represents the real block on the top right, and so on. Hover over the blocks on the sidebar to see the corresponding block light up slightly.\
+Click on any of the `dropdowns` in order to change a single blocks font.\
+Click on `Randomize All Fonts` at the bottom of the sidebar to shuffle all fonts. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Block Tools 
 
-### `npm run eject`
+Hover over any of the grids blocks to see all availible tools.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### `Info`
+Click on the info button to see all relevant information about the specific block. Specific `values`, `font name`, etc.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### `Keep`
+Click on the `Keep` button to open the `keep menu`. Once open, click on any property to apply it to all other grid blocks. For example -
+> Assuming our grid is the same as in the previous example, hovering over the second block, clicking on `Keep` and then clicking on `Font Size` would make all 4 blocks `16px`.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### `Lock Font`
+Click on `Lock Font` in order to `prevent` the specific block's `font` from changing, once clicking the `Randomize All Fonts` button.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Workflow
 
-## Learn More
+When building this tool, I was thinking mostly about user experience, efficiency and 'playability'. I designed this tool in a way that should be fun and useful.\
+Everyone is going to use this differently, but my recommendation goes as follows -
+> First thing first - type/paste your text in the sidebar and set the `Font Size` to something that is very readable easy on the eyes.\
+> Assuming you dont know what font you want to work with - 
+> 1. Pick a large grid size, and start randomizing fonts while clicking the `Randomize All Fonts` button.
+> 2. When a font that you like shows up, lock it by hovering the specific block and clicking on `Lock Font`.
+> 3. Repeat stages `1` and `2` until you have a satisfying amount of fonts you like.
+> 4. Pick the font you'd like to use, hover the block, click on `Keep` and then `Font Family` or `Keep All Styles`.
+>
+> Now that we have our font, we move on to the next step - customizing it.
+> * Go over the list of properties in the sidebar and *one by one*, play around with them.\
+> `This is important!` Change one property at a time, to really isolate each property.
+> * Here's a demonstration -\
+> Change `Font Size` -> Pick a block you like most and `Keep` the styles -> move on to the `next property`.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Thank you!
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Thank you for checking out my project. I had a blast working on this, and hope this can be useful for someone other than myself ;)\
+`Noam Shemi`.
