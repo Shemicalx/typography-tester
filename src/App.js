@@ -2,11 +2,11 @@ import React from "react";
 import './App.css';
 import TestingSideBar from "./Components/TestingSideBar";
 import DisplayBlock from "./Components/DisplayBlock";
-require('dotenv').config({path: './.env'});
+require('dotenv').config();
 const WebFont = require("webfontloader");
 
 //Need to figure out how to hide the key(.env file gave me some trouble)
-const googleFontsApiRequest = `https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyAgP9ZKkGmBu8yKCIRZXbyMKd1GNOibyWk`;
+const googleFontsApiRequest = `https://www.googleapis.com/webfonts/v1/webfonts?key=${process.env.REACT_APP_API_KEY}`;
 
 class App extends React.Component {
   constructor(props){
